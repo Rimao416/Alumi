@@ -1,0 +1,49 @@
+
+
+
+// INPUT
+.label{
+    // padding: 8px;
+    font-size: $default-font-size;
+    color: $black-color-1;
+    font-weight: 400;
+    display: block;
+}
+
+.input--form{
+    width: 100%;
+    padding: 10px;
+    outline: none;
+    border: 1px solid $gray-color-1;
+    color: $black-color-1;
+    font-weight: 500;
+    display: block;
+
+}
+
+
+// BUTTON CONFIGURATION
+.main-button{
+    background-color: $main-color !important;
+    width: 100%;
+    border: none;
+    padding: 10px;
+    cursor: pointer;
+    font-size: $default-font-size;
+    color: $white-color;
+    &--disabled{
+        background-color:$disabled-button !important;
+    }
+    svg{
+        position: relative !important;
+        width: 5% !important;
+        height:5% !important;
+        overflow:  hidden !important;
+        left: 50%;
+        background-color: transparent;
+        transform: translateX(-50%);
+    }
+    .loader{
+        background-color: transparent !important;
+    }
+}
