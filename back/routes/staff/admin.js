@@ -1,5 +1,5 @@
 const express = require("express");
-const { registerAdmin,loginAdmin } = require("../../controllers/staff/admin");
+const { registerAdmin,loginAdmin } = require("../../controllers/staff/adminController");
 // const {
 //   registerAdmCtrl,
 //   loginAdminCtrl,

@@ -1,94 +1,27 @@
 const mongoose = require("mongoose");
-const teacherSchema = new mongoose.Schema(
-  {
-    name: {
-      type: String,
-      required: true,
-    },
-    email: {
-      type: String,
-      required: true,
-    },
-    password: {
-      type: String,
-      required: true,
-    },
-    dateEmployed: {
-      type: Date,
-      default: Date.now,
-    },
-    teacherId: {
-      type: String,
-      required: true,
-      default: function () {
-        return (
-          "PRO" +
-          Math.floor(100 + Math.random() * 900) +
-          Date.now().toString().slice(2, 4) +
-          this.name
-            .split(" ")
-            .map(name => name[0])
-            .join("")
-            .toUpperCase()
-        );
-      },
-    },
-    //if witdrawn, the teacher will not be able to login
-    isWitdrawn: {
-      type: Boolean,
-      default: false,
-    },
-    //if suspended, the teacher can login but cannot perform any task
-    isSuspended: {
-      type: Boolean,
-      default: false,
-    },
-    role: {
-      type: String,
-      default: "teacher",
-    },
-    subject: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "Subject",
-      // required: true,
-    },
-    applicationStatus: {
-      type: String,
-      enum: ["pending", "approved", "rejected"],
-      default: "pending",
-    },
+const User = require("./User");
+const teacherSchema = new mongoose.Schema({});
+teacherSchema.set("toObject", { virtuals: true }); // Définissez l'option pour inclure les champs virtuels lors de la conversion en objet
+teacherSchema.set("toJSON", { virtuals: true }); // Définissez l'option pour inclure les champs virtuels lors de la conversion en JSON
 
-    program: {
-      type: String,
-    },
-    //A teacher can teach in more than one class level
-    classLevel: {
-      type: String,
-    },
-    academicYear: {
-      type: String,
-    },
-    examsCreated: [
-      {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "Exam",
-      },
-    ],
-    createdBy: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "Admin",
-      // required: true,
-    },
-    academicTerm: {
-      type: String,
-    },
-  },
-  {
-    timestamps: true,
+// Définissez la valeur par défaut pour le champ "role" comme "admin"
+teacherSchema.pre("validate", function (next) {
+  if (!this.role) {
+    this.role = "teacher";
   }
-);
+  if (!this.code) {
+    this.code =
+      "TEA" +
+      Math.floor(100 + Math.random() * 900) +
+      Date.now().toString().slice(2, 4) +
+      this.name
+        .split(" ")
+        .map((name) => name[0])
+        .join("")
+        .toUpperCase();
+  }
+  next();
+});
 
-//model
-const Teacher = mongoose.model("Teacher", teacherSchema);
-
+const Teacher = User.discriminator("Teacher", teacherSchema);
 module.exports = Teacher;

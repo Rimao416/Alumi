@@ -2,10 +2,11 @@ const express = require("express"); //Faire appel au Package d'expressJs
 const morgan = require("morgan");
 const AppError = require("./utils/appError");
 const globalErrorHandler = require("./controllers/errorController");
-const userRouter = require("./routes/userRoutes");
+const userRouter=require("./routes/staff/user");
 // const academicYearRouter = require("./routes/academics/academicYear");
 const adminRouter = require("./routes/staff/admin");
 const cors = require("cors");
+const teacherRouter = require("./routes/staff/teacher");
 const app = express();
 
 const allowedOrigins = ["http://localhost:5173"];
@@ -43,6 +44,9 @@ app.use((req, res, next) => {
 
 // app.use("/api/v1/users", userRouter);
 app.use("/api/v1/admins", adminRouter);
+app.use("/api/v1/teachers",teacherRouter)
+app.use('/api/v1/users',userRouter)
+
 // app.use("/api/v1/academic-years", academicYearRouter);
 
 // Handle Errors
