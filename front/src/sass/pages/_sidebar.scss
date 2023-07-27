@@ -5,6 +5,15 @@ html {
   * {
     background-color: inherit;
   }
+  &--inactive {
+    width: 80px;
+    .sidebar__menu {
+      text-align: center;
+      &--text {
+        display: none;
+      }
+    }
+  }
   // font-size: $default-font-size;
 
   position: fixed;
@@ -65,31 +74,48 @@ html {
       font-weight: 500;
       margin-left: 1rem;
       background-color: transparent;
+      // display: none;
+      // margin: 0;
+      // padding: 0;
     }
   }
 }
 
-.sidebar.inactive {
-  width: 80px;
+@include respond(tab-port) {
+  .sidebar {
+    display: none;
+    &--inactive {
+      display: block;
+      width: 80px;
+      // margin-left: 45px;
+    }
+  }
 }
+
+// .sidebar .inactive {
+//   width: 80px;
+// }
 
 .layout {
   * {
     background-color: transparent;
   }
-  width: 400px;
-  overflow: hidden;
   margin-left: 25rem;
   background-color: $color-primary;
   height: 100vh;
+  width: calc(100% - 25rem);
   font-size: $default-font-size;
-
+  transition: 0.2s ease-in all;
+  &--inactive {
+    width: calc(100% - 80px);
+    margin-left: 80px;
+  }
   &__navigation {
     background-color: $white-color;
-    width: calc(100% - 25rem);
+
     // padding: 11px 0;
     padding: 9px 15px;
-    position: fixed;
+    position: relative;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -137,7 +163,7 @@ html {
       background-color: $white-color;
       padding: 10px;
       font-weight: 500;
-      
+
       // color: $gray-color-4;
       &--item {
         @include liste;
@@ -166,18 +192,35 @@ html {
         height: 15px;
         margin-right: 5px;
       }
-      &--active{
+      &--active {
         display: none;
+      }
+      @include respond(tab-port){
+        width: 100%;
+        left: 0;
       }
     }
     // &--right{
     //     color: red !important;
     // }
   }
-  // svg {
-  //   position: relative;
-  //   background-color: transparent;
-  //   width: 18px;
-  //   height: 24px;
-  // }
+}
+@include respond(tab-port) {
+  .layout {
+    width: 100%;
+    margin: 0;
+    &--inactive {
+      margin-left: 80px;
+      width: calc(100% - 80px);
+    }
+  }
+  .users__profile {
+    width: 100%;
+  
+  }
+}
+svg {
+  position: relative;
+  background-color: transparent;
+  fill: transparent;
 }

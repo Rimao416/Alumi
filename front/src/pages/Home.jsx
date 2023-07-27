@@ -8,6 +8,7 @@ import settings from "../assets/icons/settings.svg";
 import task from "../assets/icons/task.svg";
 function Home() {
   const [toggle, setToggle] = useState(false);
+  const [inactive, setInactive] = useState(false);
   const menuRef = useRef(null);
   const linkRef = useRef(null);
   useEffect(() => {
@@ -31,7 +32,7 @@ function Home() {
   };
   return (
     <>
-      <div className="sidebar">
+      <div className={`sidebar  ${inactive ? "sidebar--inactive" : ""}`}>
         <div className="sidebar__wrapper">
           <img src="" className="sidebar__wrapper--top" alt="" />
         </div>
@@ -131,9 +132,9 @@ function Home() {
           </ul>
         </div>
       </div>
-      <div className="layout">
+      <div className={`layout  ${inactive ? "layout--inactive" : ""}`}>
         <div className="layout__navigation">
-          <span className="layout__navigation--left">
+          <span className="layout__navigation--left" onClick={()=>setInactive(!inactive)}>
             <CgMenuLeftAlt />
           </span>
 
@@ -192,6 +193,7 @@ function Home() {
             }
           </div>
         </div>
+        <h1>Salut</h1>
       </div>
     </>
   );
