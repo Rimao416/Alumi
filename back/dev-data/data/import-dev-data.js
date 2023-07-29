@@ -1,7 +1,7 @@
 const fs = require('fs');
 const mongoose = require('mongoose');
 const dotenv = require('dotenv');
-const Tour = require('./../../models/tourModel');
+const AcademicYear = require('../../models/academic/AcademicYear');
 
 dotenv.config({ path: './config.env' });
 
@@ -19,14 +19,14 @@ mongoose
   .then(() => console.log('DB connection successful!'));
 
 // READ JSON FILE
-const tours = JSON.parse(
-  fs.readFileSync(`${__dirname}/tours-simple.json`, 'utf-8')
+const academicYear = JSON.parse(
+  fs.readFileSync(`${__dirname}/academicYear.json`, 'utf-8')
 );
 
 // IMPORT DATA INTO DB
 const importData = async () => {
   try {
-    await Tour.create(tours);
+    await AcademicYear.create(academicYear);
     console.log('Data successfully loaded!');
   } catch (err) {
     console.log(err);
@@ -37,7 +37,7 @@ const importData = async () => {
 // DELETE ALL DATA FROM DB
 const deleteData = async () => {
   try {
-    await Tour.deleteMany();
+    await AcademicYear.deleteMany();
     console.log('Data successfully deleted!');
   } catch (err) {
     console.log(err);

@@ -1,35 +1,35 @@
-const AysncHandler = require("express-async-handler");
-const AcademicYear = require("../../model/Academic/AcademicYear");
-const Admin = require("../../model/Staff/Admin");
+const AcademicYear = require("../../models/academic/AcademicYear");
+// const Admin = require("../../model/Staff/Admin");
+const catchAsync = require("../../utils/catchAsync");
 
-exports.createAcademicYear = AysncHandler(async (req, res) => {
-    const { name, fromYear, toYear } = req.body;
-    //check if exists
-    const academicYear = await AcademicYear.findOne({ name });
-    if (academicYear) {
-      throw new Error("Academic year already exists");
-    }
-    //create
-    const academicYearCreated = await AcademicYear.create({
-      name,
-      fromYear,
-      toYear,
-      createdBy: req.userAuth._id,
-    });
-    //push academic into admin
-    const admin = await Admin.findById(req.userAuth._id);
-    admin.academicYears.push(academicYearCreated._id);
-    await admin.save();
-    res.status(201).json({
-      status: "success",
-      message: "Academic year created successfully",
-      data: academicYearCreated,
-    });
+exports.createAcademicYear = catchAsync(async (req, res) => {
+  const { fromYear, toYear } = req.body;
+  //check if exists
+  // const academicYear = await AcademicYear.findOne();
+  // if (academicYear) {
+  //   throw new Error("Academic year already exists");
+  // }
+  //create
+  const academicYearCreated = await AcademicYear.create({
+    fromYear,
+    toYear,
+    // createdBy: req.userAuth._id,
+  }); // A decommenter
+  // // console.log(fromYear, toYear);
+  // //push academic into admin
+  // // const admin = await Admin.findById(req.userAuth._id);
+  // // admin.academicYears.push(academicYearCreated._id);
+  // // await admin.save();
+  res.status(201).json({
+    status: "success",
+    message: "Academic year created successfully",
+    data: academicYearCreated,
   });
+});
 //@desc  get all Academic Years
 //@route GET /api/v1/academic-years
 //@acess  Private
-exports.getAcademicYears = AysncHandler(async (req, res) => {
+exports.getAcademicYears = catchAsync(async (req, res) => {
   const academicYears = await AcademicYear.find();
 
   res.status(201).json({
@@ -42,7 +42,7 @@ exports.getAcademicYears = AysncHandler(async (req, res) => {
 //@desc  get single Academic Year
 //@route GET /api/v1/academic-years/:id
 //@acess  Private
-exports.getAcademicYear = AysncHandler(async (req, res) => {
+exports.getAcademicYear = catchAsync(async (req, res) => {
   const academicYears = await AcademicYear.findById(req.params.id);
 
   res.status(201).json({
@@ -55,7 +55,7 @@ exports.getAcademicYear = AysncHandler(async (req, res) => {
 //@desc   Update  Academic Year
 //@route  PUT /api/v1/academic-years/:id
 //@acess  Private
-exports.updateAcademicYear = AysncHandler(async (req, res) => {
+exports.updateAcademicYear = catchAsync(async (req, res) => {
   const { name, fromYear, toYear } = req.body;
   //check name exists
   const createAcademicYearFound = await AcademicYear.findOne({ name });
@@ -85,7 +85,7 @@ exports.updateAcademicYear = AysncHandler(async (req, res) => {
 //@desc   Update  Academic Year
 //@route  PUT /api/v1/academic-years/:id
 //@acess  Private
-exports.deleteAcademicYear = AysncHandler(async (req, res) => {
+exports.deleteAcademicYear = catchAsync(async (req, res) => {
   await AcademicYear.findByIdAndDelete(req.params.id);
 
   res.status(201).json({

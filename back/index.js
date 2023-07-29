@@ -5,6 +5,7 @@ const globalErrorHandler = require("./controllers/errorController");
 const userRouter=require("./routes/staff/user");
 // const academicYearRouter = require("./routes/academics/academicYear");
 const adminRouter = require("./routes/staff/admin");
+const academicYearRouter = require("./routes/academics/academicYear");
 const cors = require("cors");
 const teacherRouter = require("./routes/staff/teacher");
 const app = express();
@@ -46,6 +47,7 @@ app.use((req, res, next) => {
 app.use("/api/v1/admins", adminRouter);
 app.use("/api/v1/teachers",teacherRouter)
 app.use('/api/v1/users',userRouter)
+app.use('/api/v1/academic-years',academicYearRouter)
 
 // app.use("/api/v1/academic-years", academicYearRouter);
 

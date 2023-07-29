@@ -7,10 +7,11 @@ adminSchema.set("toJSON", { virtuals: true }); // Définissez l'option pour incl
 // Définissez la valeur par défaut pour le champ "role" comme "admin"
 adminSchema.pre("validate", function (next) {
   if (!this.role) {
-    this.role = "admin";
+    this.role = "Admin";
   }
   if (!this.code) {
-    "ADM" +
+    this.code =
+      "ADM" +
       Math.floor(100 + Math.random() * 900) +
       Date.now().toString().slice(2, 4) +
       this.name

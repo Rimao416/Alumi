@@ -3,25 +3,12 @@ const Admin = require("../../models/staff/Admin");
 const catchAsync = require("../../utils/catchAsync");
 const jwt = require("jsonwebtoken");
 const AppError = require("../../utils/appError");
+const createSendToken = require("../../utils/createSendToken");
 // const generateToken = require("../../utils/generateToken");
 // const verifyToken = require("../../utils/verifyToken");
 // const { hashPassword, isPassMatched } = require("../../utils/helpers");
 // const catchAsync=require("./../../utils/appError")
-const signToken = (id) => {
-    return jwt.sign({ id: id }, process.env.JWT_SECRET, {
-      expiresIn: process.env.JWT_EXPIRES_IN,
-    });
-  };
-  const createSendToken = (user, statusCode, res) => {
-    const token = signToken(user._id);
-    res.status(statusCode).json({
-      status: "success",
-      token,
-      data: {
-        user,
-      },
-    });
-  };
+
 
 //@desc Register admin
 //@route POST /api/admins/register

@@ -4,7 +4,7 @@ const handleJWTExpiredError = () =>
   new AppError("Le token a expiré, connectez vous à nouveau",401);
 
 const handleJWTError = () =>
-  new AppError("Invalid Token, Conntectez vous encore", 401);
+  new AppError("Token Invalide, Conntectez vous encore", 401);
 
 const handleCastErrorDB = (err) => {
   const message = `Invalid Id ${err.path}: ${err.value}.`;

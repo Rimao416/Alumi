@@ -1,6 +1,7 @@
 const crypto = require("crypto");
 const { promisify } = require("util");
 
+const jwt = require("jsonwebtoken");
 // const sendEmail = require("./../utils/email");
 const createSendToken=require("../../utils/createSendToken");
 const User = require("../../models/staff/User");
@@ -55,12 +56,12 @@ exports.protect = catchAsync(async (req, res, next) => {
 
   // 4) Vérifier si le mot de passe a changé après la création du token
 
-  if (freshUser.changedPasswordAfter(decoded.iat)) {
-    return next(
-      new AppError("L'utilisateur a recemment changé son mot de passe"),
-      401
-    );
-  }
+  // if (freshUser.changedPasswordAfter(decoded.iat)) {
+  //   return next(
+  //     new AppError("L'utilisateur a recemment changé son mot de passe"),
+  //     401
+  //   );
+  // }
   req.user = freshUser;
   next();
 });
@@ -68,7 +69,7 @@ exports.protect = catchAsync(async (req, res, next) => {
 exports.restrictTo = (...roles) => {
   return (req, res, next) => {
     if (!roles.includes(req.user.role)) {
-      return next(new AppError("You are not allow to execute this", 403));
+      return next(new AppError("Vous n'êtes pas authorisé à effectuer cette action", 403));
     }
     next();
   };

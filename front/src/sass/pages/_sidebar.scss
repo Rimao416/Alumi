@@ -1,6 +1,6 @@
-html {
-  background: $color-tertiary;
-}
+// html {
+//   background: red;
+// }
 .sidebar {
   * {
     background-color: inherit;
@@ -17,7 +17,7 @@ html {
   // font-size: $default-font-size;
 
   position: fixed;
-  background: $color-secondary;
+  background: $color-senary;
   width: 25rem;
   height: 100%;
   overflow: hidden;
@@ -45,7 +45,8 @@ html {
       position: relative;
       @include liste;
       width: 100%;
-      color: $color-quaternary;
+      // color: $color-quaternary;
+      color: $white-color;
       padding: 10px;
       fill: $color-quaternary;
       cursor: pointer;
@@ -70,7 +71,7 @@ html {
       height: 15px;
     }
     &--text {
-      font-size: $default-font-size;
+      font-size: $default-font-size-2;
       font-weight: 500;
       margin-left: 1rem;
       background-color: transparent;
@@ -101,8 +102,7 @@ html {
     background-color: transparent;
   }
   margin-left: 25rem;
-  background-color: $color-primary;
-  height: 100vh;
+  // background-color: $color-primary; J'ai commenté ça expressement
   width: calc(100% - 25rem);
   font-size: $default-font-size;
   transition: 0.2s ease-in all;
@@ -163,6 +163,7 @@ html {
       background-color: $white-color;
       padding: 10px;
       font-weight: 500;
+      z-index: 1000;
 
       // color: $gray-color-4;
       &--item {
@@ -195,10 +196,6 @@ html {
       &--active {
         display: none;
       }
-      @include respond(tab-port){
-        width: 100%;
-        left: 0;
-      }
     }
     // &--right{
     //     color: red !important;
@@ -215,12 +212,37 @@ html {
     }
   }
   .users__profile {
-    width: 100%;
-  
+    width: 100% !important;
+    position: absolute;
+ right: 0;
+ left: 0;
   }
 }
-svg {
-  position: relative;
-  background-color: transparent;
-  fill: transparent;
+// svg {
+//   position: relative;
+//   background-color: transparent;
+//   fill: transparent;
+// }
+
+.main-layout {
+  height: 100vh;
+  padding: 10px;
+  width: calc(100% - 25rem);
+  margin-left: 25rem;
+  background-color: $color-primary;
+  &--inactive {
+    width: calc(100% - 8rem);
+    margin-left: 8rem;
+  }
+}
+@include respond(tab-port) {
+  .main-layout {
+    // display: none;
+    // width: 100%;
+    margin-left: 0;
+    &--inactive {
+      margin-left: 80px;
+      width: calc(100% - 80px);
+    }
+  }
 }

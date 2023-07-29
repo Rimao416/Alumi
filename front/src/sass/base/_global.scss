@@ -1,0 +1,73 @@
+// DATATABLE
+.rdt_Table {
+  font-size: $default-font-size !important;
+  border-spacing: 0 !important;
+  border: 0 !important;
+  border-collapse: collapse !important;
+}
+.rdt_TableCol {
+  background-color: $color-septenary !important;
+  color: $color-senary;
+}
+.rdt_TableHead {
+  font-weight: 600 !important;
+}
+.rdt_TableCell,
+.rdt_TableHead {
+  font-size: $default-font-size-2 !important;
+}
+
+.datatable__grade {
+  .rdt_TableCell {
+    &:nth-child(2) {
+      @include colorDatatable($color-octonary, 700);
+    }
+    &:nth-child(3),
+    &:nth-child(4) {
+      @include colorDatatable($color-quaternary);
+      // font-weight: 700;
+    }
+    &:nth-child(5),
+    &:nth-child(6) {
+      @include colorDatatable($color-octonary, 600);
+    }
+  }
+}
+
+// HEADER DATATABLE
+.datatable{
+    &__header{
+        background-color: $white-color;
+        padding: 15px;
+        display: flex;
+        justify-content:
+         space-between;
+         position: relative;
+         align-items: center;
+        &--left{
+            flex-basis: 30%;
+        }
+        &--icon{
+            position: absolute;
+            color: $color-octonary;
+            font-size: 2rem;
+            z-index: 0;
+        }
+        &--input{
+            margin-left: 10%;
+            width: 70% !important;
+        }
+    }
+}
+
+
+
+
+
+// FLATPICKR
+.flatpickr-input{
+    @include form;
+    &:focus{
+        border:1px solid $main-color !important;
+    }
+}

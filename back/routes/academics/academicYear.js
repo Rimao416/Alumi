@@ -1,25 +1,31 @@
 const express = require("express");
-const {
-  createAcademicYear,
-  getAcademicYears,
-  getAcademicYear,
-  updateAcademicYear,
-  deleteAcademicYear,
-} = require("../../controller/academics/academicYear");
+const acadedemicYearController = require("../../controllers/academic/academicYear");
+const authController = require("../../controllers/staff/authController");
+
+// const {
+//   createAcademicYear,
+//   getAcademicYears,
+//   getAcademicYear,
+//   updateAcademicYear,
+//   deleteAcademicYear,
+// } = require("../../controllers/academic/academicYear");
 // const isAdmin = require("../../middlewares/isAdmin");
 // const isLogin = require("../../middlewares/isLogin");
 
 const academicYearRouter = express.Router();
 
+
+academicYearRouter.use(authController.protect)
+academicYearRouter.use(authController.restrictTo("Admin"))
 academicYearRouter
   .route("/")
-  .post(createAcademicYear)
-  .get(getAcademicYears);
+  .post(acadedemicYearController.createAcademicYear)
+  .get(acadedemicYearController.getAcademicYears);
 academicYearRouter
   .route("/:id")
-  .get(getAcademicYear)
-  .put(updateAcademicYear)
-  .delete(deleteAcademicYear);
+  .get(acadedemicYearController.getAcademicYear)
+  .put(acadedemicYearController.updateAcademicYear)
+  .delete(acadedemicYearController.deleteAcademicYear);
 // academicYearRouter
 //   .route("/")
 //   .post(isLogin, isAdmin, createAcademicYear)

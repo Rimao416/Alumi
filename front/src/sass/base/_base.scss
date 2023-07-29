@@ -5,7 +5,7 @@
     padding: 0;
     box-sizing: border-box;
     font-family: $font-family;
-    background-color: $color-primary;
+    // background-color: $color-primary;
 }
 
 html {
@@ -39,5 +39,11 @@ body {
     @include respond(phone) {
         padding: 0;
     }
+    // .active-modal{
+    //     filter: blur(2px);
+    //     overflow-x:hidden !important;
+    //     overflow-y:hidden !important;
+    // }
 
 }
+

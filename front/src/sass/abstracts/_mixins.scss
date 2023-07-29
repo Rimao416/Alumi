@@ -26,9 +26,33 @@
     font-weight: 500;
 
   }
+
+  @mixin colorDatatable($color,$weight:normal) {
+    color: $color !important;
+    font-weight: $weight !important;
+}
+
+@mixin buttonConfig($color:$white-color, $backgroundColor:$main-color,$fontSize:$default-font-size) {
+  width: 100%;
+  outline: none;
+  border: none;
+  font-size: $fontSize;
+  color:$color;
+  cursor: pointer;
+  background-color: $backgroundColor;
+}
   
   @mixin hoverSidebar{
     
+  }
+  @mixin form{
+    width: 100%;
+    padding: 10px;
+    outline: none;
+    border: 1px solid $gray-color-1;
+    color: $black-color-1;
+    font-weight: 500;
+    display: block;
   }
   
   // MEDIA QUERY MANAGER
@@ -84,3 +108,4 @@
       }
     }
   }
+

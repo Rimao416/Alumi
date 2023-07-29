@@ -4,15 +4,15 @@ const academicYearSchema = new mongoose.Schema(
   {
     name: {
       type: String,
-      required: true,
+      unique: [true, "Cette année académique existe déjà"],
     },
     fromYear: {
       type: Date,
-      required: true,
-    }, 
+      required: [true, "Entrez le premier jour de l'année"],
+    },
     toYear: {
       type: Date,
-      required: true,
+      required: [true, "Entrez le dernier jour de l'année"],
     },
     isCurrent: {
       type: Boolean,
@@ -21,7 +21,7 @@ const academicYearSchema = new mongoose.Schema(
     createdBy: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Admin",
-      required: true,
+      // required: true,
     },
     students: [
       {
@@ -43,6 +43,12 @@ const academicYearSchema = new mongoose.Schema(
     timestamps: true,
   }
 );
+academicYearSchema.pre("save", function (next) {
+  const fromYear = this.fromYear.getFullYear();
+  const toYear = this.toYear.getFullYear();
+  this.name = `${fromYear}-${toYear}`;
+  next()
+});
 
 //model
 const AcademicYear = mongoose.model("AcademicYear", academicYearSchema);

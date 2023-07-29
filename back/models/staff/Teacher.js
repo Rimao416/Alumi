@@ -7,7 +7,7 @@ teacherSchema.set("toJSON", { virtuals: true }); // Définissez l'option pour in
 // Définissez la valeur par défaut pour le champ "role" comme "admin"
 teacherSchema.pre("validate", function (next) {
   if (!this.role) {
-    this.role = "teacher";
+    this.role = "Teacher";
   }
   if (!this.code) {
     this.code =

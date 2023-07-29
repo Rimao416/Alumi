@@ -1,4 +1,7 @@
 .auth {
+  &__wrapper {
+    background-color: $white-color;
+  }
     &__logo{
         width:55px;
         height: 55px;
