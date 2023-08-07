@@ -4,12 +4,14 @@ import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { PiEye, PiEyeSlash } from "react-icons/pi";
-import { logIn } from "../redux/actions/AuthAction";
+// import { logIn } from "../redux/actions/AuthAction";
 import MainButton from "../components/MainButton";
+import { login } from "../redux/slice/authSlice";
+// import { login } from "../redux/slice/authSlice";
 function Login() {
   const [type, setType] = useState("password");
   const dispatch = useDispatch();
-  const {loading,errorType} = useSelector((state) => state.authReducer);
+  // const {loading,errorType} = useSelector((state) => state.authReducer);
   const navigate = useNavigate();
   const [user, setUser] = useState({
     identifier: "",
@@ -21,7 +23,7 @@ function Login() {
   const handleSubmit = (event) => {
     event.preventDefault();
     console.log(user);
-    dispatch(logIn(user, navigate));
+    dispatch(login(user));
   };
   const isButtonDisabled = user.identifier.length==0 || user.password.length==0;
   console.log(isButtonDisabled)
@@ -42,7 +44,7 @@ function Login() {
           </label>
           <input
             type="text"
-            className={`auth__form--input input--form u-margin-top-small ${errorType ==="ErrorIdentifier" && 'error' }`}
+            className={`auth__form--input input--form u-margin-top-small`}
             name="identifier"
             onChange={handleChange}
           />

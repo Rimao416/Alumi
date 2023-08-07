@@ -45,3 +45,49 @@ ReactDOM.render(
     <App />
   </Router>,
   document.getElementById("root")
+
+
+
+
+
+
+    <div className="datatable__header">
+        <div className="datatable__header--left input--form">
+          <span className="datatable__header--icon">
+            <HiSearch />
+          </span>
+
+          <input
+            type="text"
+            name="search"
+            placeholder="Rechercher quelque chose"
+            className="form-control datatable__header--input"
+            id=""
+            onChange={handleFilter}
+          />
+        </div>
+        <div className="datatable__header--right">
+          <button className="btn " onClick={() => setModal(true)}>
+            Ajouter une année
+          </button>
+        </div>
+      </div>
+
+      <div className="datatable__grade">
+        {loading ? (
+          <p>Loading...</p>
+        ) : (
+          <Datatable
+            columns={columns}
+            data={filteredAcademicYears}
+            selectableRows
+            pagination
+          />
+        )}
+      </div>
+      {modal && (
+        <ModalHandleAcademicYear
+          onClose={() => setModal(false)}
+          modal={modal}
+        />
+      )}

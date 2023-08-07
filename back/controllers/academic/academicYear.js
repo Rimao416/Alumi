@@ -23,7 +23,7 @@ exports.createAcademicYear = catchAsync(async (req, res) => {
   res.status(201).json({
     status: "success",
     message: "Academic year created successfully",
-    data: academicYearCreated,
+    academicYearCreated,
   });
 });
 //@desc  get all Academic Years

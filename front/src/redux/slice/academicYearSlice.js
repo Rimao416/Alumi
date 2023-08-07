@@ -1,5 +1,5 @@
 const academicYearReducer = (
-  state = { academicYear: null, loading: false, error: false, errorType: null },
+  state = { academicYear: [], loading: false, error: false, errorType: null },
   action
 ) => {
   switch (action.type) {
@@ -27,20 +27,20 @@ const academicYearReducer = (
         ...state,
         loading: true,
         error: false,
-      }
+      };
     case "CREATE_ACADEMIC_YEAR_SUCCESS":
       return {
         ...state,
+        academicYear: [...state.academicYear],
         loading: false,
         error: false,
-        academicYear: action.data,
-      }
+      };
     case "CREATE_ACADEMIC_YEAR_FAIL":
       return {
         ...state,
         loading: false,
         error: true,
-      }
+      };
     default:
       return state;
   }
