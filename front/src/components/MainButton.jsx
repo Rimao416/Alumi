@@ -2,9 +2,9 @@ import React from "react";
 import { useSelector } from "react-redux";
 import { Oval } from "react-loader-spinner";
 import { Audio } from "react-loader-spinner";
-function MainButton({ text, isDisabled }) {
-  // const loading = useSelector((state) => state.authReducer.loading);
-  const loading = false;
+function MainButton({ text, isDisabled,loading }) {
+  
+  // const loading = false;
   return (
     <button
       className={`main-button  u-block ${

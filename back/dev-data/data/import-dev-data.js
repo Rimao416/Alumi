@@ -1,33 +1,39 @@
-const fs = require('fs');
-const mongoose = require('mongoose');
-const dotenv = require('dotenv');
-const AcademicYear = require('../../models/academic/AcademicYear');
+const fs = require("fs");
+const mongoose = require("mongoose");
+const dotenv = require("dotenv");
+const AcademicYear = require("../../models/academic/AcademicYear");
+const AcademicTerm = require("../../models/academic/AcademicTerm");
 
-dotenv.config({ path: './config.env' });
+dotenv.config({ path: "./config.env" });
 
 const DB = process.env.DATABASE.replace(
-  '<PASSWORD>',
+  "<PASSWORD>",
   process.env.DATABASE_PASSWORD
 );
 
-mongoose.set('strictQuery',true)
+mongoose.set("strictQuery", true);
 mongoose
   .connect(DB, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
   })
-  .then(() => console.log('DB connection successful!'));
+  .then(() => console.log("DB connection successful!"));
 
 // READ JSON FILE
+const academicTerm = JSON.parse(
+  fs.readFileSync(`${__dirname}/academicTerm.json`, "utf-8")
+);
 const academicYear = JSON.parse(
-  fs.readFileSync(`${__dirname}/academicYear.json`, 'utf-8')
+  fs.readFileSync(`${__dirname}/academicYear.json`, "utf-8")
 );
 
 // IMPORT DATA INTO DB
 const importData = async () => {
   try {
-    await AcademicYear.create(academicYear);
-    console.log('Data successfully loaded!');
+    await AcademicTerm.create(academicTerm);
+    console.log("Data successfully loaded!");
+    // await AcademicYear.create(academicYear);
+    // console.log('Data successfully loaded!');
   } catch (err) {
     console.log(err);
   }
@@ -37,18 +43,20 @@ const importData = async () => {
 // DELETE ALL DATA FROM DB
 const deleteData = async () => {
   try {
-    await AcademicYear.deleteMany();
-    console.log('Data successfully deleted!');
+    await AcademicTerm.deleteMany();
+    console.log("Data successfully deleted!");
+    // await AcademicYear.deleteMany();
+    // console.log('Data successfully deleted!');
   } catch (err) {
     console.log(err);
   }
   process.exit();
 };
 
-if (process.argv[2] === '--import') {
+if (process.argv[2] === "--import") {
   importData();
-} else if (process.argv[2] === '--delete') {
+} else if (process.argv[2] === "--delete") {
   deleteData();
 }
 
-console.log(process.argv)
+console.log(process.argv);

@@ -1,99 +1,107 @@
-import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
-import authService from './authService'
+import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import axios from "axios";
 
-// Get user from localStorage
-const user = JSON.parse(localStorage.getItem('user'))
+// const API_URL = "localhost:5000/api/v1/users";
+const API = axios.create({ baseURL: "http://localhost:5000" });
+API.defaults.withCredentials = true;
 
-const initialState = {
-  user: user ? user : null,
-  isError: false,
-  isSuccess: false,
-  isLoading: false,
-  message: '',
-}
+// const AUTH_URL = "http://localhost:5000/api/v1/users/login";
+import { toast } from "react-toastify";
+// Action asynchrone pour la connexion
+export const login = createAsyncThunk("auth/login", async (credentials) => {
+  try {
+    const response = await API.post("/api/v1/users/login", credentials);
+    // console.log(response)
+    return response.data;
+  } catch (error) {
+    toast.error(
+      error.response.data.message ||
+        "Une erreur est survenue lors de la connexion."
+    );
 
-// Register user
-export const register = createAsyncThunk(
-  'auth/register',
-  async (user, thunkAPI) => {
+    throw error.response.data;
+
+    // throw error.response.data;
+  }
+});
+
+export const resetPassword = createAsyncThunk(
+  "auth/resetPassword",
+  async (data) => {
+    const { token } = data;
+
+    console.log(token);
+    const credentials = {
+      password: data.password,
+      passwordConfirm: data.passwordConfirm,
+    };
+    console.log(data);
     try {
-      return await authService.register(user)
+      const response = await API.patch(
+        `/api/v1/users/resetPassword/${token}`,
+        credentials
+      );
+      console.log(response);
+      return response.data;
     } catch (error) {
-      const message =
-        (error.response &&
-          error.response.data &&
-          error.response.data.message) ||
-        error.message ||
-        error.toString()
-      return thunkAPI.rejectWithValue(message)
+      toast.error(
+        error.response.data.message ||
+          "Une erreur est survenue lors de la connexion."
+      );
+      throw error.response.data;
     }
   }
-)
+);
 
-// Login user
-export const login = createAsyncThunk('auth/login', async (user, thunkAPI) => {
-  try {
-    console.log("Salut mes gens")
-    return await authService.login(user)
-  } catch (error) {
-    const message =
-      (error.response && error.response.data && error.response.data.message) ||
-      error.message ||
-      error.toString()
-    return thunkAPI.rejectWithValue(message)
-  }
-})
-
-export const logout = createAsyncThunk('auth/logout', async () => {
-  await authService.logout()
-})
-
-export const authSlice = createSlice({
-  name: 'auth',
-  initialState,
-  reducers: {
-    reset: (state) => {
-      state.isLoading = false
-      state.isSuccess = false
-      state.isError = false
-      state.message = ''
-    },
+// Slice Redux pour gérer l'authentification
+const authSlice = createSlice({
+  name: "auth",
+  initialState: {
+    user: null,
+    loading: false,
+    error: null,
+    errorType: null,
   },
+  reducers: {},
   extraReducers: (builder) => {
     builder
-      .addCase(register.pending, (state) => {
-        state.isLoading = true
-      })
-      .addCase(register.fulfilled, (state, action) => {
-        state.isLoading = false
-        state.isSuccess = true
-        state.user = action.payload
-      })
-      .addCase(register.rejected, (state, action) => {
-        state.isLoading = false
-        state.isError = true
-        state.message = action.payload
-        state.user = null
-      })
       .addCase(login.pending, (state) => {
-        state.isLoading = true
+        state.loading = true;
+        state.error = null;
       })
       .addCase(login.fulfilled, (state, action) => {
-        state.isLoading = false
-        state.isSuccess = true
-        state.user = action.payload
+        // console.log(action.payload)
+        state.loading = false;
+        state.user = action.payload;
+        state.error = null;
+        localStorage.setItem("profile", JSON.stringify({ ...action?.payload }));
+        // console.log(role)
+
+        // console.log(action.payload)
       })
       .addCase(login.rejected, (state, action) => {
-        state.isLoading = false
-        state.isError = true
-        state.message = action.payload
-        state.user = null
+        state.loading = false;
+        state.error = true;
+        state.errorType = action.error.message;
       })
-      .addCase(logout.fulfilled, (state) => {
-        state.user = null
+      .addCase(resetPassword.pending, (state) => {
+        state.loading = true;
+        state.error = null;
       })
-  },
-})
+      .addCase(resetPassword.fulfilled, (state, action) => {
+        state.loading = false;
+        state.error = false;
+        state.user = action.payload;
 
-export const { reset } = authSlice.actions
-export default authSlice.reducer
+        localStorage.setItem("profile", JSON.stringify({ ...action?.payload }));
+        toast.success(action.payload.message);
+      })
+      .addCase(resetPassword.rejected, (state, action) => {
+        state.loading = false;
+        state.error = true;
+        state.errorType = action.payload.message;
+      });
+  },
+});
+
+export default authSlice.reducer;

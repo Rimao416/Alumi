@@ -42,7 +42,14 @@
 // }
 // .u-margin-top-huge { margin-top: 10rem !important; }
 
-.error{
-  border:1px solid red !important;
-
+.error {
+  border: 1px solid red !important;
+}
+.error-message {
+  color: red !important;
+  font-size: $default-font-size-3 !important;
+}
+.success-message {
+  color: green !important;
+  font-size: $default-font-size-3 !important;
 }

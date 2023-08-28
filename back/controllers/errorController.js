@@ -13,7 +13,7 @@ const handleCastErrorDB = (err) => {
 
 const handleDuplicatesDB = (err) => {
   const value = err.errmsg.match(/(["'])(\\?.)*?\1/)[0];
-  const message = `Duplicate field value ${value}, choisit un autre`;
+  const message = `Valeur de champ en double : ${value}, entrez une nouvelle valeur`;
   return new AppError(message, 400);
 };
 const handleValidationErrorDB = (err) => {

@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 
 
 function ProtectedRoutes({roles}) {
-   const isAuthenticated = useSelector((state) => state.authReducer.authData?.user);
+   const isAuthenticated = useSelector((state) => state.auth.user?.user);
 
   console.log(isAuthenticated);
   return isAuthenticated?.role.includes(roles) ? (

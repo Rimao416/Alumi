@@ -20,11 +20,11 @@ const login = async (userData) => {
   const response = await API.post('/api/v1/users/login', userData)
   console.log(response)
 
-//   if (response.data) {
-//     localStorage.setItem('user', JSON.stringify(response.data))
-//   }
+  if (response.data) {
+    localStorage.setItem('user', JSON.stringify(response.data))
+  }
 
-//   return response.data
+  return response.data
 }
 
 // Logout user

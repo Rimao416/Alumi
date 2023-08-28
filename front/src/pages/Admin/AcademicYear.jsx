@@ -1,71 +1,74 @@
-import React, { useEffect, useState } from "react";
+import  { useEffect, useState } from "react";
 import MainLayout from "../../layout/MainLayout";
 import Datatable from "react-data-table-component";
 import { HiSearch } from "react-icons/hi";
 import { useDispatch, useSelector } from "react-redux";
 import moment from "moment";
-// import ModalHandleAcademicYear from "../../components/modal/ModalHandleAcademicYear";
+import { closeModal, fetchAcademicYears } from "../../redux/slice/academicYearSlice";
+import ModalHandleAcademicYear from "../../components/modal/ModalHandleAcademicYear";
 function AcademicYear() {
+  const handleModal=()=>{
+    closeModal()
+    setModal(true)
+  }
   const dispatch = useDispatch();
   useEffect(() => {
-    console.log("Bonjour mes amours");
-    // dispatch(getAcademicYears());
+    dispatch(fetchAcademicYears());
     // console.log("Je lance")
   }, [dispatch]);
 
-  // const { data } = useSelector(
-  //   (state) => state.academicYearReducer.academicYear
-  // );
+  const data = useSelector(
+    (state) => state.academicYearReducer.academicYear
+  );
   // const { loading } = useSelector(
   //   (state) => state.academicYearReducer
   // );
-  console.log("Chargement")
 
   console.log(data);
   // console.log(data);
   const [searchQuery, setSearchQuery] = useState("");
-  const [selectedRows, setSelectedRows] = React.useState([]);
-  // const columns = [
-  //   {
-  //     name: "Année Académique",
-  //     selector: (row) => row.name,
-  //     sortable: true,
-  //   },
-  //   {
-  //     name: "Période",
-  //     selector: (row) =>
-  //       moment(row.fromYear).format("DD/MM/YYYY") +
-  //       " - " +
-  //       moment(row.toYear).format("DD/MM/YYYY"),
-  //     sortable: true,
-  //   },
-  //   {
-  //     name: "Date de création",
-  //     selector: (row) => moment(row.createdAt).format("DD/MM/YYYY"),
-  //     sortable: true,
-  //   },
-  //   {
-  //     name: "Nombre d'étudiants",
-  //     selector: (row) => Math.floor(Math.random(0, 100) * 140),
-  //     sortable: true,
-  //   },
-  //   {
-  //     name: "Nombre d'enseignants",
-  //     selector: (row) => Math.floor(Math.random(0, 100) * 140),
-  //     sortable: true,
-  //   },
-  //   {
-  //     name: "Actions",
-  //     cell: (row) => (
-  //       <button className="btn" onClick={() => handleVoirPlus(row)}>
-  //         Voir plus
-  //       </button>
-  //     ),
-  //     ignoreRowClick: true,
-  //     allowOverflow: true,
-  //     button: true,
-  //   },
-  // ];
+  // const [selectedRows, setSelectedRows] = React.useState([]);
+  const columns = [
+    {
+      name: "Année Académique",
+      selector: (row) => row.name,
+      sortable: true,
+    },
+    {
+      name: "Période",
+      selector: (row) =>
+        moment(row.fromYear).format("DD/MM/YYYY") +
+        " - " +
+        moment(row.toYear).format("DD/MM/YYYY"),
+      sortable: true,
+    },
+    {
+      name: "Date de création",
+      selector: (row) => moment(row.createdAt).format("DD/MM/YYYY"),
+      sortable: true,
+    },
+    {
+      name: "Nombre d'étudiants",
+      selector: (row) => Math.floor(Math.random(0, 100) * 140),
+      sortable: true,
+    },
+    {
+      name: "Nombre d'enseignants",
+      selector: (row) => Math.floor(Math.random(0, 100) * 140),
+      sortable: true,
+    },
+    {
+      name: "Actions",
+      cell: (row) => (
+        <button className="btn" onClick={() => handleVoirPlus(row)}>
+          Voir plus
+        </button>
+      ),
+      ignoreRowClick: true,
+      allowOverflow: true,
+      button: true,
+    },
+  ];
   const [modal, setModal] = useState(false);
   const handleVoirPlus = (row) => {
     console.log(row);
@@ -74,52 +77,60 @@ function AcademicYear() {
     setSearchQuery(event.target.value);
   };
 
-  // const filteredAcademicYears = data?.filter(
-  //   (row) => {
-  //     const nameMatch = row.name
-  //       .toLowerCase()
-  //       .includes(searchQuery.toLowerCase());
-  //     const periodMatch =
-  //       moment(row.fromYear).format("DD/MM/YYYY").includes(searchQuery) ||
-  //       moment(row.toYear).format("DD/MM/YYYY").includes(searchQuery);
-  //     const createAtMatch = moment(row.createdAt)
-  //       .format("DD/MM/YYYY")
-  //       .includes(searchQuery);
+  const filteredAcademicYears = data?.filter(
+    (row) => {
+      const nameMatch = row.name
+        .toLowerCase()
+        .includes(searchQuery.toLowerCase());
+      const periodMatch =
+        moment(row.fromYear).format("DD/MM/YYYY").includes(searchQuery) ||
+        moment(row.toYear).format("DD/MM/YYYY").includes(searchQuery);
+      const createAtMatch = moment(row.createdAt)
+        .format("DD/MM/YYYY")
+        .includes(searchQuery);
 
-  //     return nameMatch || periodMatch || createAtMatch;
-  //   }
-  //   // row.name.toLowerCase().includes(searchQuery.toLowerCase())
-  // );
+      return nameMatch || periodMatch || createAtMatch;
+    }
+    // row.name.toLowerCase().includes(searchQuery.toLowerCase())
+  );
 
   return (
     <MainLayout>
-      <div className="datatable__header">
-        <div className="datatable__header--left input--form">
-          <span className="datatable__header--icon">
-            <HiSearch />
-          </span>
+    <div className="datatable__header">
+      <div className="datatable__header--left input--form">
+        <span className="datatable__header--icon">
+          <HiSearch />
+        </span>
 
-          <input
-            type="text"
-            name="search"
-            placeholder="Rechercher quelque chose"
-            className="form-control datatable__header--input"
-            id=""
-            onChange={handleFilter}
-          />
-        </div>
-        <div className="datatable__header--right">
-          <button className="btn " onClick={() => setModal(true)}>
-            Ajouter une année
-          </button>
-        </div>
+        <input
+          type="text"
+          name="search"
+          placeholder="Rechercher quelque chose"
+          className="form-control datatable__header--input"
+          id=""
+          onChange={handleFilter}
+        />
       </div>
+      <div className="datatable__header--right">
+        <button className="btn " onClick={handleModal}>
+          Ajouter une année
+        </button>
+      </div>
+    </div>
 
-      <div className="datatable__grade">
-    
-      </div>
-     
-    </MainLayout>
+    <div className="datatable__grade">
+      <Datatable
+        columns={columns}
+        data={filteredAcademicYears}
+        selectableRows
+        pagination
+      />
+    </div>
+    {modal && <ModalHandleAcademicYear onClose={()=>setModal(false)}
+      modal={modal}
+    />}
+  
+  </MainLayout>
   );
 }
 

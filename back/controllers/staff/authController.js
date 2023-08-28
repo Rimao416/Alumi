@@ -2,29 +2,35 @@ const crypto = require("crypto");
 const { promisify } = require("util");
 
 const jwt = require("jsonwebtoken");
+
 // const sendEmail = require("./../utils/email");
-const createSendToken=require("../../utils/createSendToken");
+const createSendToken = require("../../utils/createSendToken");
 const User = require("../../models/staff/User");
 const catchAsync = require("../../utils/catchAsync");
 const AppError = require("../../utils/appError");
-
+const sendEmail = require("../../utils/email");
 
 exports.login = catchAsync(async (req, res, next) => {
   const { identifier, password } = req.body;
   // 1) Vérifier si l'email et mot de passe existe
-  if(!identifier){
-    next(new AppError("Veuillez remplir le champ du mail/code",400,"ErrorIdentifier"));
+  if (!identifier) {
+    next(
+      new AppError(
+        "Veuillez remplir le champ du mail/code",
+        400,
+        "ErrorIdentifier"
+      )
+    );
   }
-  if(!password){
-    next(new AppError("Veuillez remplir le mot passe",400,"ErrorPassword"));
+  if (!password) {
+    next(new AppError("Veuillez remplir le mot passe", 400, "ErrorPassword"));
   }
-  
 
   // 2) Vérifie si l'utilisateur existe ou le mot de passe est correcte
   const user = await User.findOne({
     $or: [{ email: identifier }, { code: identifier }],
   }).select("+password");
-  console.log(user)
+  console.log(user);
   if (!user || !(await user.correctPassword(password, user.password))) {
     return next(new AppError("Mail/code ou Mot de passe incorrect", 401));
   }
@@ -40,6 +46,8 @@ exports.protect = catchAsync(async (req, res, next) => {
     req.headers.authorization.startsWith("Bearer")
   ) {
     token = req.headers.authorization.split(" ")[1];
+  } else if (req.cookies.jwt) {
+    token = req.cookies.jwt;
   }
 
   if (!token) {
@@ -66,31 +74,73 @@ exports.protect = catchAsync(async (req, res, next) => {
   next();
 });
 
+exports.isLoggedIn = async (req, res, next) => {
+  if (req.cookies.jwt) {
+    try {
+      // 1) verify token
+      const decoded = await promisify(jwt.verify)(
+        req.cookies.jwt,
+        process.env.JWT_SECRET
+      );
+
+      // 2) Check if user still exists
+      const currentUser = await User.findById(decoded.id);
+      if (!currentUser) {
+        return next();
+      }
+
+      // 3) Check if user changed password after the token was issued
+      if (currentUser.changedPasswordAfter(decoded.iat)) {
+        return next();
+      }
+
+      // THERE IS A LOGGED IN USER
+      res.locals.user = currentUser;
+      return next();
+    } catch (err) {
+      return next();
+    }
+  }
+  next();
+};
+
+
+
+
+
+
 exports.restrictTo = (...roles) => {
   return (req, res, next) => {
     if (!roles.includes(req.user.role)) {
-      return next(new AppError("Vous n'êtes pas authorisé à effectuer cette action", 403));
+      return next(
+        new AppError("Vous n'êtes pas authorisé à effectuer cette action", 403)
+      );
     }
     next();
   };
 };
 
 exports.forgotPassword = catchAsync(async (req, res, next) => {
+  const { identifier } = req.body;
   // 1) Get USER BASED ON POSTED EMAIL
-  const user = await User.findOne({ email: req.body.email });
+  const user = await User.findOne({
+    $or: [{ email: identifier }, { code: identifier }],
+  });
   if (!user) {
     return next(
-      new AppError("Il n'y a pas d'utilisateur avec cette adresse", 404)
+      new AppError("Aucun utilisateur trouvé avec ce(tte) code(adresse)", 404)
     );
   }
-  // 2) GENERATE THE RANDOM RESET TOKEN
+
+  // // 2) GENERATE THE RANDOM RESET TOKEN
   const resetToken = user.createPasswordResetToken();
+  console.log(resetToken);
   await user.save({ validateBeforeSave: false });
-  // 3)Envoyer à l'utilisateur
+  // // 3)Envoyer à l'utilisateur
   const resetURL = `${req.protocol}://${req.get(
     "host"
   )}/api/v1/users/resetPassword/${resetToken}`;
-  const message = `Forgot your password ? Confirmez votre identité ici ${resetURL}.\n If you didn't your password, `;
+  const message = `Mot de passe oublié ? Confirmez votre identité ici ${resetURL}.\n Si vous n'etes pas l'utilisateur, ignorez ce mail.`;
 
   try {
     await sendEmail({
@@ -100,7 +150,8 @@ exports.forgotPassword = catchAsync(async (req, res, next) => {
     });
     res.status(200).json({
       status: "success",
-      message: "Token sent to email",
+      message:
+        "Un lien de réinitialisation de mot de passe a été envoyé à votre adresse e-mail. Veuillez vérifier votre boîte de réception et suivre les instructions pour réinitialiser votre mot de passe. Si vous ne trouvez pas le message dans votre boîte de réception, veuillez vérifier le dossier de courrier indésirable",
     });
   } catch (error) {
     user.passwordResetToken = undefined;
@@ -110,25 +161,35 @@ exports.forgotPassword = catchAsync(async (req, res, next) => {
   }
 });
 exports.resetPassword = catchAsync(async (req, res, next) => {
+  console.log(req.body);
+  console.log(req.params.token);
   // 1) Get User based on the token
   const hashedToken = crypto
     .createHash("sha256")
     .update(req.params.token)
     .digest("hex");
-
+  // console.log(hashedToken)
   const user = await User.findOne({
     passwordResetToken: hashedToken,
     passwordResetExpires: { $gt: Date.now() },
   });
-  console.log(user);
   // 2) Si le token n'a pas expiré et qu'il y'a un utilisateur, définit un mot de passe
   if (!user) {
     return next(new AppError("Token Invalide ou a expiré", 400));
   }
   user.password = req.body.password;
   user.passwordConfirm = req.body.passwordConfirm;
-  user.passwordResetToken = undefined;
-  user.passwordResetExpires = undefined;
+  if (!(await user.saveWithPasswordConfirmValidation())) {
+    return next(
+      new AppError(
+        "Les champs de mot de passe et de confirmation du mot de passe doivent être remplis et les mêmes. Veuillez vérifier",
+        400
+      )
+    );
+  }
+
+  // user.passwordResetToken = undefined;
+  // user.passwordResetExpires = undefined;
   await user.save();
   // 3) Modifier l'attribut changedPasswordAt pour l'utilisateur
 

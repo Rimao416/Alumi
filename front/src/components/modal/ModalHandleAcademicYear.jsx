@@ -1,21 +1,27 @@
-import React, { useState } from "react";
+import { useState, useEffect } from "react";
 import ModalLayout from "../../layout/ModalLayout";
 ModalLayout;
 
 import "flatpickr/dist/themes/light.css";
-import moment from "moment"
+import moment from "moment";
 
 import Flatpickr from "react-flatpickr";
-import { useDispatch } from "react-redux";
-import { createAcademicYear } from "../../redux/actions/AcademicYearAction";
+import { useDispatch, useSelector } from "react-redux";
+import { addAcademicYear } from "../../redux/slice/academicYearSlice";
 function ModalHandleAcademicYear({ onClose, modal }) {
+  const { status } = useSelector((state) => state.academicYearReducer);
+  console.log(status);
+  useEffect(() => {
+    status === "fulfilled" && onClose();
+  }, [status, onClose]);
+
   const dispatch = useDispatch();
   const [date, setDate] = useState({
     fromYear: "",
-    toYear:"",
+    toYear: "",
   });
   const handleChange = (selectedDates, name) => {
-    const selectedDate = moment(selectedDates[0]).format("YYYY-MM-DD")
+    const selectedDate = moment(selectedDates[0]).format("YYYY-MM-DD");
 
     setDate({
       ...date,
@@ -26,11 +32,11 @@ function ModalHandleAcademicYear({ onClose, modal }) {
       [name]: selectedDate,
     }));
   };
-  const handleSubmit=(event)=>{
-    event.preventDefault()
-    console.log(date)
-    dispatch(createAcademicYear(date))
-  }
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    console.log(date);
+    dispatch(addAcademicYear(date));
+  };
 
   return (
     <ModalLayout
@@ -41,30 +47,32 @@ function ModalHandleAcademicYear({ onClose, modal }) {
       <form onSubmit={handleSubmit}>
         <div className="form__wrapper">
           <label htmlFor="" className="auth__form--label label">
-            Premier jour de l'année
+            Premier jour de l&apos;année
           </label>
           <Flatpickr
-          data-enable-time
-          name="fromYear"
-          value={date.toYear}
-          onChange={(selectedDates) => handleChange(selectedDates, "fromYear")}
-          options={{
-            enableTime: false,
-          }}
+            data-enable-time
+            name="fromYear"
+            value={date.fromYear}
+            onChange={(selectedDates) =>
+              handleChange(selectedDates, "fromYear")
+            }
+            options={{
+              enableTime: false,
+            }}
           />
         </div>
         <div className="form__wrapper u-block u-margin-top-medium">
           <label htmlFor="" className="auth__form--label label">
-            Dernier jour de l'année
+            Dernier jour de l&apos;année
           </label>
           <Flatpickr
-          data-enable-time
-          name="toYear"
-          value={date.toYear}
-          onChange={(selectedDates) => handleChange(selectedDates, "toYear")}
-          options={{
-            enableTime: false,
-          }}
+            data-enable-time
+            name="toYear"
+            value={date.toYear}
+            onChange={(selectedDates) => handleChange(selectedDates, "toYear")}
+            options={{
+              enableTime: false,
+            }}
           />
         </div>
         <button className="btn u-block u-margin-top-big" type="submit">
