@@ -1,7 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import axios from "axios";
 import { toast } from "react-toastify";
-const API = axios.create({ baseURL: "http://localhost:5000" });
+import { API } from "../../config";
 API.defaults.withCredentials = true;
 export const fetchClassLevels = createAsyncThunk(
   "classLevels/fetchClassLevels",
@@ -28,7 +27,6 @@ export const addClassLevel = createAsyncThunk(
   "classLevels/addClassLevel",
   async (newClassLevel) => {
     const { token } = JSON.parse(localStorage.getItem("profile"));
-    console.log(token);
     // console.log(newClassLevel);
     API.defaults.headers.common["Authorization"] = `Bearer ${token}`;
     try {
@@ -57,36 +55,52 @@ const classLevelSlice = createSlice({
     errorType: null,
     status: "idle",
   },
-  reducers: {},
+  reducers: {
+    openModal(state) {
+      state.status = "idle";
+    },
+    closeModal(state) {
+      state.status = "fulfilled";
+    },
+  },
   extraReducers: (builder) => {
     builder
-      .addCase(fetchClassLevels.pending, (state, action) => {
+      .addCase(fetchClassLevels.pending, (state) => {
         state.loading = true;
         state.error = false;
+        state.status = "idle";
       })
       .addCase(fetchClassLevels.fulfilled, (state, action) => {
         state.loading = false;
         state.classLevel = action.payload.data;
         state.error = false;
+        state.status = "fulfilled";
       })
       .addCase(fetchClassLevels.rejected, (state, action) => {
         state.loading = false;
         state.error = action.error.message;
+        state.status = "rejected";
       })
       .addCase(addClassLevel.pending, (state) => {
         state.loading = true;
         state.error = null;
+        state.status = "idle";
       })
       .addCase(addClassLevel.fulfilled, (state, action) => {
         console.log(action);
         state.loading = false;
         state.classLevel = [...state.classLevel, action.payload];
+        state.status = "fulfilled";
         // state.academicYear.push(action.payload.academicYearCreated);
       })
       .addCase(addClassLevel.rejected, (state, action) => {
         state.loading = false;
         state.error = action.error.message;
+        state.status = "rejected";
       });
   },
 });
+
+
+export const {openModal, closeModal}=classLevelSlice.actions;
 export default classLevelSlice.reducer;

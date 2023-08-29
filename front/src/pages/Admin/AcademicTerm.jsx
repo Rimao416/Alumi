@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import MainLayout from "../../layout/MainLayout";
-import { HiSearch } from "react-icons/hi";
 import Datatable from "react-data-table-component";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -9,6 +8,7 @@ import {
 } from "../../redux/slice/academicTermSlice";
 
 import ModalHandleTerm from "../../components/modal/ModalHandleTerm";
+import DataTableHeader from "../../components/DataTableHeader";
 function AcademicTerm() {
   const dispatch = useDispatch();
   const [modal, setModal] = useState(false);
@@ -22,6 +22,8 @@ function AcademicTerm() {
   }, [dispatch]);
   const data = useSelector((state) => state.academicTermReducer.academicTerm);
   console.log(data);
+  const { loading } = useSelector((state) => state.academicTermReducer);
+  console.log(loading);
 
   const columns = [
     {
@@ -42,27 +44,12 @@ function AcademicTerm() {
 
   return (
     <MainLayout>
-      <div className="datatable__header">
-        <div className="datatable__header--left input--form">
-          <span className="datatable__header--icon">
-            <HiSearch />
-          </span>
-
-          <input
-            type="text"
-            name="search"
-            placeholder="Rechercher quelque chose"
-            className="form-control datatable__header--input"
-            id=""
-            onChange={handleFilter}
-          />
-        </div>
-        <div className="datatable__header--right">
-          <button className="btn " onClick={handleTerm}>
-            Ajouter un nouvelle Période
-          </button>
-        </div>
-      </div>
+      <DataTableHeader
+        buttonText=" Ajouter une nouvelle Période"
+        handleFilter={handleFilter}
+        onClick={handleTerm}
+        loading={loading}
+      />
 
       <div className="datatable__grade">
         <Datatable

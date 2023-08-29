@@ -13,7 +13,7 @@ exports.createAcademicYear = catchAsync(async (req, res) => {
   const academicYearCreated = await AcademicYear.create({
     fromYear,
     toYear,
-    // createdBy: req.userAuth._id,
+    createdBy: req.user._id,
   }); // A decommenter
   // // console.log(fromYear, toYear);
   // //push academic into admin
@@ -22,7 +22,7 @@ exports.createAcademicYear = catchAsync(async (req, res) => {
   // // await admin.save();
   res.status(201).json({
     status: "success",
-    message: "Academic year created successfully",
+    message: "Année académique crée avec succès",
     academicYearCreated,
   });
 });
@@ -34,7 +34,7 @@ exports.getAcademicYears = catchAsync(async (req, res) => {
 
   res.status(201).json({
     status: "success",
-    message: "Academic years fetched successfully",
+    message: "Années Académiques chargées avec Succès",
     data: academicYears,
   });
 });

@@ -1,15 +1,17 @@
 import { useState, useEffect } from "react";
 import ModalLayout from "../../layout/ModalLayout";
 ModalLayout;
+import MainButton from "../MainButton.jsx"
 
 import "flatpickr/dist/themes/light.css";
 import moment from "moment";
 
 import Flatpickr from "react-flatpickr";
 import { useDispatch, useSelector } from "react-redux";
+
 import { addAcademicYear } from "../../redux/slice/academicYearSlice";
 function ModalHandleAcademicYear({ onClose, modal }) {
-  const { status } = useSelector((state) => state.academicYearReducer);
+  const { status,loading } = useSelector((state) => state.academicYearReducer);
   console.log(status);
   useEffect(() => {
     status === "fulfilled" && onClose();
@@ -75,9 +77,8 @@ function ModalHandleAcademicYear({ onClose, modal }) {
             }}
           />
         </div>
-        <button className="btn u-block u-margin-top-big" type="submit">
-          Enregistrer
-        </button>
+        <MainButton text="Enregistrer" loading={loading} type="submit" classname="main-button"/>
+
       </form>
     </ModalLayout>
   );

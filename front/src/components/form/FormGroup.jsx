@@ -1,5 +1,4 @@
-import Select from "./Select";
-
+import PropTypes from 'prop-types';
 function FormGroup({ label, children }) {
   return (
     <>
@@ -9,6 +8,12 @@ function FormGroup({ label, children }) {
       {children}
     </>
   );
+}
+
+
+FormGroup.propTypes={
+  label: PropTypes.string,
+  children: PropTypes.node
 }
 
 export default FormGroup;

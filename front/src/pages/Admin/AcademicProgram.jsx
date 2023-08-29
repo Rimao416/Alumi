@@ -1,25 +1,29 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import MainLayout from "../../layout/MainLayout";
 import Datatable from "react-data-table-component";
-import { HiSearch } from "react-icons/hi";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchAcademicPrograms } from "../../redux/slice/academicProgram";
+import {
+  fetchAcademicPrograms,
+  openModal,
+} from "../../redux/slice/academicProgram";
 import ModalHandleProgram from "../../components/modal/ModalHandleProgram";
+import DataTableHeader from "../../components/DataTableHeader";
 function AcademicProgram() {
-  const [searchQuery, setSearchQuery] = useState("");
   const dispatch = useDispatch();
+  const [searchQuery, setSearchQuery] = useState("");
   const [modal, setModal] = useState(false);
-  const handleModal=()=>{
-    // closeModal()
-    setModal(true)
-  }
+  const handleModal = () => {
+    // closeModal();
+    dispatch(openModal());
+    setModal(true);
+  };
   useEffect(() => {
     dispatch(fetchAcademicPrograms());
   }, [dispatch]);
   const data = useSelector(
     (state) => state.academicProgramReducer.academicProgram
   );
-  console.log(data)
+  console.log(data);
 
   const columns = [
     {
@@ -45,27 +49,11 @@ function AcademicProgram() {
 
   return (
     <MainLayout>
-      <div className="datatable__header">
-        <div className="datatable__header--left input--form">
-          <span className="datatable__header--icon">
-            <HiSearch />
-          </span>
-
-          <input
-            type="text"
-            name="search"
-            placeholder="Rechercher quelque chose"
-            className="form-control datatable__header--input"
-            id=""
-            onChange={handleFilter}
-          />
-        </div>
-        <div className="datatable__header--right">
-          <button className="btn " onClick={handleModal}>
-            Ajouter un nouveau programme
-          </button>
-        </div>
-      </div>
+      <DataTableHeader
+        buttonText=" Ajouter un nouveau programme"
+        handleFilter={handleFilter}
+        onClick={handleModal}
+      />
 
       <div className="datatable__grade">
         <Datatable

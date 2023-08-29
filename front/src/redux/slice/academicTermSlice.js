@@ -1,9 +1,8 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import axios from "axios";
 
 import { toast } from "react-toastify";
-const API = axios.create({ baseURL: "http://localhost:5000" });
-
+import { API } from "../../config";
+API.defaults.withCredentials = true;
 export const fetchAcademicTerms = createAsyncThunk(
   "academicTerms/fetchAcademicTerms",
   async () => {
@@ -30,7 +29,6 @@ export const addAcademicTerm = createAsyncThunk(
 
   async (newAcademicTerm) => {
     const { token } = JSON.parse(localStorage.getItem("profile"));
-    console.log(token);
     API.defaults.headers.common["Authorization"] = `Bearer ${token}`;
     try {
       const response = await API.post(

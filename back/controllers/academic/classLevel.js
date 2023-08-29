@@ -11,9 +11,9 @@ exports.createClassLevel = catchAsync(async (req, res, next) => {
     },
   }).countDocuments();
 
-    console.log(classLevel);
   const classCreated = await ClassLevel.create({
     name: name + " " + (classLevel + 1),
+    createdBy: req.user._id,
   });
   res.status(201).json({
     status: "success",

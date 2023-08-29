@@ -84,7 +84,7 @@ function Login() {
         <Link to="/password-forgot" className="auth__register-link u-block">
           Mot de passe Oublié
         </Link>
-        <MainButton text="Connexion" isDisabled={isButtonDisabled}  loading={loading}/>
+        <MainButton text="Connexion" isDisabled={isButtonDisabled} type="submit" classname="main-button"  loading={loading}/>
       </form>
     </AuthLayout>
   );

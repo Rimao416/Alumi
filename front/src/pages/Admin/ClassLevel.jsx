@@ -2,11 +2,10 @@ import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import Datatable from "react-data-table-component";
 import MainLayout from "../../layout/MainLayout";
-import { fetchAcademicYears } from "../../redux/slice/academicYearSlice";
-import { HiSearch } from "react-icons/hi";
 import moment from "moment";
-import { fetchClassLevels } from "../../redux/slice/classSlice";
+import { fetchClassLevels, openModal } from "../../redux/slice/classSlice";
 import ModalHandleClass from "../../components/modal/ModalHandleClass";
+import DataTableHeader from "../../components/DataTableHeader";
 function ClassLevel() {
   const [searchQuery, setSearchQuery] = useState("");
   const columns = [
@@ -23,7 +22,7 @@ function ClassLevel() {
     },
     {
       name: "Actions",
-      cell: (row) => <button className="btn">Voir plus</button>,
+      cell: () => <button className="btn">Voir plus</button>,
       ignoreRowClick: true,
       allowOverflow: true,
       button: true,
@@ -35,7 +34,8 @@ function ClassLevel() {
     dispatch(fetchClassLevels());
   }, [dispatch]);
   const data = useSelector((state) => state.classLevelReducer.classLevel);
-  console.log(data)
+  console.log(data);
+
   const handleFilter = (event) => {
     setSearchQuery(event.target.value);
   };
@@ -57,32 +57,12 @@ function ClassLevel() {
     // row.name.toLowerCase().includes(searchQuery.toLowerCase())
   );
   const handleModal = () => {
+    dispatch(openModal());
     setModal(true);
   };
   return (
     <MainLayout>
-      <div className="datatable__header">
-        <div className="datatable__header--left input--form">
-          <span className="datatable__header--icon">
-            <HiSearch />
-          </span>
-
-          <input
-            type="text"
-            name="search"
-            placeholder="Rechercher quelque chose"
-            className="form-control datatable__header--input"
-            id=""
-            onChange={handleFilter}
-          />
-        </div>
-        <div className="datatable__header--right">
-          <button className="btn " onClick={handleModal}>
-            Ajouter un Niveau
-          </button>
-        </div>
-      </div>
-
+    <DataTableHeader buttonText="Ajouter un Niveau" handleFilter={handleFilter} onClick={handleModal} />
       <div className="datatable__grade">
         <Datatable
           columns={columns}

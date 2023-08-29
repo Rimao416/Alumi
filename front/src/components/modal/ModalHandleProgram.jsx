@@ -4,18 +4,21 @@ import ModalLayout from "../../layout/ModalLayout";
 import FormGroup from "../form/FormGroup";
 import Input from "../form/Input";
 import { addAcademicPrograms } from "../../redux/slice/academicProgram";
+import MainButton from "../MainButton";
 
 function ModalHandleProgram({ onClose, modal }) {
+    const dispatch = useDispatch();
   const [program, setProgram] = useState({
     name: "",
     duration: "",
   });
-  const { status } = useSelector((state) => state.academicYearReducer);
+  const { status,loading } = useSelector((state) => state.academicProgramReducer);
+  
   console.log(status);
   useEffect(() => {
     status === "fulfilled" && onClose();
   }, [status, onClose]);
-  const dispatch = useDispatch();
+ 
   const handleChange = (event) => {
     setProgram({ ...program, [event.target.name]: event.target.value });
   };
@@ -53,9 +56,8 @@ function ModalHandleProgram({ onClose, modal }) {
             />
           </FormGroup>
         </div>
-        <button className="btn u-block u-margin-top-big" type="submit">
-          Enregistrer
-        </button>
+        <MainButton type="submit" classname="main-button" text="Enregistrer" loading={loading}/>
+    
       </form>
     </ModalLayout>
   );

@@ -1,13 +1,12 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import axios from "axios";
 import { toast } from "react-toastify";
-const API = axios.create({ baseURL: "http://localhost:5000" });
+import { API } from "../../config";
+API.defaults.withCredentials = true;
 
 export const fetchAcademicPrograms = createAsyncThunk(
   "academicPrograms/fetchAcademicPrograms",
   async () => {
     const { token } = JSON.parse(localStorage.getItem("profile"));
-    console.log(token);
     API.defaults.headers.common["Authorization"] = `Bearer ${token}`;
     try {
       const response = await API.get("/api/v1/academic-programs");
@@ -56,38 +55,53 @@ const academicProgramsSlice = createSlice({
     loading: false,
     error: false,
     errorType: null,
+    status: null,
   },
-  reducers: {},
+  reducers: {
+    openModal(state) {
+      state.status = "idle";
+    },
+    closeModal(state) {
+      state.status = "fulfilled";
+    },
+  },
 
   extraReducers: (builder) => {
     builder
       .addCase(fetchAcademicPrograms.pending, (state) => {
         state.loading = true;
         state.error = false;
+        state.status = "idle";
       })
       .addCase(fetchAcademicPrograms.fulfilled, (state, action) => {
         state.loading = false;
         state.academicProgram = action.payload.data;
         state.error = false;
+        state.status = "fulfilled";
       })
       .addCase(fetchAcademicPrograms.rejected, (state, action) => {
         state.loading = false;
         state.error = action.error.message;
+        state.status = "rejected";
       })
       .addCase(addAcademicPrograms.pending, (state) => {
         state.loading = true;
         state.error = null;
+        state.status = "idle";
       })
       .addCase(addAcademicPrograms.fulfilled, (state, action) => {
         state.loading = false;
         state.error = null;
         state.academicProgram = [...state.academicProgram, action.payload];
+        state.status = "fulfilled";
       })
       .addCase(addAcademicPrograms.rejected, (state, action) => {
         state.loading = false;
         state.error = action.error.message;
+        state.status = "rejected";
       });
   },
 });
 
+export const { openModal, closeModal } = academicProgramsSlice.actions;
 export default academicProgramsSlice.reducer;

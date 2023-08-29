@@ -1,13 +1,15 @@
-import React, { useState } from "react";
+import React, { useState,useEffect } from "react";
 import ModalLayout from "../../layout/ModalLayout";
 import FormGroup from "../form/FormGroup";
 import Select from "../form/Select";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { addClassLevel } from "../../redux/slice/classSlice";
+import MainButton from "../MainButton";
 
 function ModalHandleClass({ onClose, modal }) {
   const dispatch = useDispatch();
   const [name, setName] = useState("Licence");
+  const { status,loading } = useSelector((state) => state.classLevelReducer);
   const handleChange = (event) => {
     setName(event.target.value);
   };
@@ -16,6 +18,9 @@ function ModalHandleClass({ onClose, modal }) {
     dispatch(addClassLevel(name))
     // disp
   };
+  useEffect(() => {
+    status === "fulfilled" && onClose();
+  }, [status, onClose]);
   return (
     <ModalLayout title="Nouveau Niveau" onClose={onClose} modal={modal}>
       <form onSubmit={handleSubmit}>
@@ -28,9 +33,8 @@ function ModalHandleClass({ onClose, modal }) {
             </Select>
           </FormGroup>
         </div>
-        <button className="btn u-block u-margin-top-big" type="submit">
-          Enregistrer
-        </button>
+        <MainButton type="submit" classname="main-button" text="Enregistrer" loading={loading}/>
+      
       </form>
     </ModalLayout>
   );

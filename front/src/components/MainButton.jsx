@@ -2,17 +2,18 @@ import React from "react";
 import { useSelector } from "react-redux";
 import { Oval } from "react-loader-spinner";
 import { Audio } from "react-loader-spinner";
-function MainButton({ text, isDisabled,loading }) {
+function MainButton({ text, isDisabled,type="button",classname, loading,onClick }) {
   
   // const loading = false;
   return (
     <button
-      className={`main-button  u-block ${
-        isDisabled ? "main-button--disabled" : ""
+      className={`${classname}  u-block ${
+        isDisabled ? `${classname}--disabled` : ""
       } u-margin-top-big`}
-      type="submit"
+      type={type}
       // onClick={() => setScreen(screen)}
       disabled={isDisabled}
+      onClick={onClick}
     >
       {loading ? (
         <Oval

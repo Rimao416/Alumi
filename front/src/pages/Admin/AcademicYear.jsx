@@ -1,25 +1,27 @@
-import  { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import MainLayout from "../../layout/MainLayout";
 import Datatable from "react-data-table-component";
-import { HiSearch } from "react-icons/hi";
 import { useDispatch, useSelector } from "react-redux";
 import moment from "moment";
-import { closeModal, fetchAcademicYears } from "../../redux/slice/academicYearSlice";
+import {
+  fetchAcademicYears,
+  openModal,
+} from "../../redux/slice/academicYearSlice";
 import ModalHandleAcademicYear from "../../components/modal/ModalHandleAcademicYear";
+import DataTableHeader from "../../components/DataTableHeader";
 function AcademicYear() {
-  const handleModal=()=>{
-    closeModal()
-    setModal(true)
-  }
   const dispatch = useDispatch();
+  const handleModal = () => {
+    dispatch(openModal());
+    setModal(true);
+  };
+
   useEffect(() => {
     dispatch(fetchAcademicYears());
     // console.log("Je lance")
   }, [dispatch]);
 
-  const data = useSelector(
-    (state) => state.academicYearReducer.academicYear
-  );
+  const data = useSelector((state) => state.academicYearReducer.academicYear);
   // const { loading } = useSelector(
   //   (state) => state.academicYearReducer
   // );
@@ -49,12 +51,12 @@ function AcademicYear() {
     },
     {
       name: "Nombre d'étudiants",
-      selector: (row) => Math.floor(Math.random(0, 100) * 140),
+      selector: () => Math.floor(Math.random(0, 100) * 140),
       sortable: true,
     },
     {
       name: "Nombre d'enseignants",
-      selector: (row) => Math.floor(Math.random(0, 100) * 140),
+      selector: () => Math.floor(Math.random(0, 100) * 140),
       sortable: true,
     },
     {
@@ -96,41 +98,22 @@ function AcademicYear() {
 
   return (
     <MainLayout>
-    <div className="datatable__header">
-      <div className="datatable__header--left input--form">
-        <span className="datatable__header--icon">
-          <HiSearch />
-        </span>
-
-        <input
-          type="text"
-          name="search"
-          placeholder="Rechercher quelque chose"
-          className="form-control datatable__header--input"
-          id=""
-          onChange={handleFilter}
+    <DataTableHeader buttonText="Ajouter une année" handleFilter={handleFilter} onClick={handleModal} />
+      <div className="datatable__grade">
+        <Datatable
+          columns={columns}
+          data={filteredAcademicYears}
+          selectableRows
+          pagination
         />
       </div>
-      <div className="datatable__header--right">
-        <button className="btn " onClick={handleModal}>
-          Ajouter une année
-        </button>
-      </div>
-    </div>
-
-    <div className="datatable__grade">
-      <Datatable
-        columns={columns}
-        data={filteredAcademicYears}
-        selectableRows
-        pagination
-      />
-    </div>
-    {modal && <ModalHandleAcademicYear onClose={()=>setModal(false)}
-      modal={modal}
-    />}
-  
-  </MainLayout>
+      {modal && (
+        <ModalHandleAcademicYear
+          onClose={() => setModal(false)}
+          modal={modal}
+        />
+      )}
+    </MainLayout>
   );
 }
 

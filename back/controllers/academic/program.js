@@ -4,6 +4,7 @@ exports.createProgram = catchAsync(async (req, res, next) => {
   const academicProgramCreated = await Program.create({
     name: req.body.name,
     duration: req.body.duration,
+    createdBy: req.user._id,
   });
   res.status(201).json({
     status: "success",

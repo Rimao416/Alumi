@@ -1,6 +1,14 @@
-import React from "react";
-import {Link} from "react-router-dom"
-function Sidebar({inactive}) {
+import PropTypes from "prop-types";
+import { useState } from "react";
+import { Link } from "react-router-dom";
+function Sidebar({ inactive }) {
+  const [activeLink, setActiveLink] = useState("");
+  console.log(activeLink);
+
+  const handleLinkClick = (link) => {
+    setActiveLink(link);
+  };
+
   return (
     <div className={`sidebar  ${inactive ? "sidebar--inactive" : ""}`}>
       <div className="sidebar__wrapper">
@@ -9,7 +17,14 @@ function Sidebar({inactive}) {
       <div className="sidebar__divider"></div>
       <div className="sidebar__navigation u-block u-margin-top-extra">
         <ul className="sidebar__menu">
-          <Link exact to="/a" className="sidebar__menu--link">
+          <Link
+            exact
+            to="/admin"
+            className={`sidebar__menu--link ${
+              activeLink === "Accueil" ? "active" : ""
+            }`}
+            onClick={() => handleLinkClick("Accueil")}
+          >
             <li className="sidebar__menu--item">
               <svg
                 className="sidebar__menu--icon"
@@ -24,7 +39,14 @@ function Sidebar({inactive}) {
               <span className="sidebar__menu--text">Tableau de bord</span>
             </li>
           </Link>
-          <Link exact to="/a" className="sidebar__menu--link">
+          <Link
+            exact
+            to="/admin"
+            className={`sidebar__menu--link ${
+              activeLink === "Profile" ? "active" : ""
+            }`}
+            onClick={() => handleLinkClick("Profile")}
+          >
             <li className="sidebar__menu--item">
               <svg
                 className="sidebar__menu--icon"
@@ -39,7 +61,14 @@ function Sidebar({inactive}) {
               <span className="sidebar__menu--text">Tableau de bord</span>
             </li>
           </Link>
-          <Link exact to="/a" className="sidebar__menu--link">
+          <Link
+            exact
+            to="/admin"
+            className={`sidebar__menu--link ${
+              activeLink === "Title" ? "active" : ""
+            }`}
+            onClick={() => handleLinkClick("Title")}
+          >
             <li className="sidebar__menu--item">
               <svg
                 className="sidebar__menu--icon"
@@ -54,7 +83,14 @@ function Sidebar({inactive}) {
               <span className="sidebar__menu--text">Tableau de bord</span>
             </li>
           </Link>
-          <Link exact to="/a" className="sidebar__menu--link">
+          <Link
+            exact
+            to="/admin"
+            className={`sidebar__menu--link ${
+              activeLink === "About" ? "active" : ""
+            }`}
+            onClick={() => handleLinkClick("About")}
+          >
             <li className="sidebar__menu--item">
               <svg
                 className="sidebar__menu--icon"
@@ -69,7 +105,14 @@ function Sidebar({inactive}) {
               <span className="sidebar__menu--text">Tableau de bord</span>
             </li>
           </Link>
-          <Link exact to="/a" className="sidebar__menu--link">
+          <Link
+            exact
+            to="/admin"
+            className={`sidebar__menu--link ${
+              activeLink === "Con" ? "active" : ""
+            }`}
+            onClick={() => handleLinkClick("Con")}
+          >
             <li className="sidebar__menu--item">
               <svg
                 className="sidebar__menu--icon"
@@ -84,7 +127,14 @@ function Sidebar({inactive}) {
               <span className="sidebar__menu--text">Tableau de bord</span>
             </li>
           </Link>
-          <Link exact to="/a" className="sidebar__menu--link">
+          <Link
+            exact
+            to="/admin"
+            className={`sidebar__menu--link ${
+              activeLink === "Log" ? "active" : ""
+            }`}
+            onClick={() => handleLinkClick("Log")}
+          >
             <li className="sidebar__menu--item">
               <svg
                 className="sidebar__menu--icon"
@@ -104,5 +154,8 @@ function Sidebar({inactive}) {
     </div>
   );
 }
+Sidebar.propTypes = {
+  inactive: PropTypes.bool,
+};
 
 export default Sidebar;

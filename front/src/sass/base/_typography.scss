@@ -1,52 +1,50 @@
-
-
-
 // INPUT
-.label{
-    // padding: 8px;
-    font-size: $default-font-size;
-    color: $black-color-1;
-    font-weight: 400;
-    display: block;
+.label {
+  // padding: 8px;
+  font-size: $default-font-size;
+  color: $black-color-1;
+  font-weight: 400;
+  display: block;
 }
 
-.input--form{
-    @include form;
+.input--form {
+  @include form;
 }
-.form-control{
-    outline: none;
-    border: none;
-    width: 100%;
+.form-control {
+  outline: none;
+  border: none;
+  width: 100%;
 }
-
-
-
 
 // BUTTON CONFIGURATION
-.main-button{
-    @include buttonConfig($white-color, $main-color);
-  
-    padding: 10px;
-    cursor: pointer;
-    &--disabled{
-        background-color:$disabled-button !important;
-    }
-    svg{
-        position: relative !important;
-        width: 5% !important;
-        height:5% !important;
-        overflow:  hidden !important;
-        left: 50%;
-        background-color: transparent;
-        transform: translateX(-50%);
-    }
-    .loader{
-        background-color: transparent !important;
-    }
+.main-button {
+  @include buttonConfig($white-color, $main-color);
+  font-size: $default-font-size-2;
+
+  padding: 10px;
+  cursor: pointer;
+  &--disabled {
+    background-color: $disabled-button !important;
+  }
+  svg {
+    position: relative !important;
+    width: 5% !important;
+    height: 5% !important;
+    overflow: hidden !important;
+    left: 50%;
+    background-color: transparent;
+    transform: translateX(-50%);
+  }
+  .loader {
+    background-color: transparent !important;
+  }
 }
 
-.btn{
-    @include buttonConfig($white-color, $main-color, $default-font-size-2);
-    padding: 8px;
-    
+.secondary-button {
+  @include buttonConfig($white-color, $color-secondary);
+}
+
+.btn {
+  @include buttonConfig($white-color, $main-color, $default-font-size-2);
+  padding: 8px;
 }

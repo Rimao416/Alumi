@@ -1,18 +1,18 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import axios from "axios";
-
+import { API } from "../../config";
+API.defaults.withCredentials = true;
 import { toast } from "react-toastify";
-const API = axios.create({ baseURL: "http://localhost:5000" });
+
 
 export const fetchAcademicYears = createAsyncThunk(
   "academicYears/fetchAcademicYears",
   async () => {
     const { token } = JSON.parse(localStorage.getItem("profile"));
-    console.log(token);
     API.defaults.headers.common["Authorization"] = `Bearer ${token}`;
     try {
       const response = await API.get("/api/v1/academic-years");
       console.log(response.data.data);
+      // toast.success(response.data.message);
       return response.data;
     } catch (error) {
       console.log(error);
@@ -35,6 +35,7 @@ export const addAcademicYear = createAsyncThunk(
         newAcademicYear
       );
       console.log(response);
+      toast.success(response.data.message);
       return response.data.academicYearCreated;
     } catch (error) {
       console.log(error.response.data);
@@ -69,29 +70,35 @@ let academicYearsSlice = createSlice({
       .addCase(fetchAcademicYears.pending, (state) => {
         state.loading = true;
         state.error = false;
+        state.status = "idle";
       })
       .addCase(fetchAcademicYears.fulfilled, (state, action) => {
         console.log(action);
         state.loading = false;
         state.academicYear = action.payload.data;
+        state.status = "fulfilled";
       })
       .addCase(fetchAcademicYears.rejected, (state, action) => {
         state.loading = false;
         state.error = action.error.message;
+        state.status = "rejected";
       })
       .addCase(addAcademicYear.pending, (state) => {
         state.loading = true;
         state.error = null;
+        state.status = "idle";
       })
       .addCase(addAcademicYear.fulfilled, (state, action) => {
         console.log(action);
         state.loading = false;
         state.academicYear = [...state.academicYear, action.payload];
+        state.status = "fulfilled";
         // state.academicYear.push(action.payload.academicYearCreated);
       })
       .addCase(addAcademicYear.rejected, (state, action) => {
         state.loading = false;
         state.error = action.error.message;
+        state.status = "rejected";
       });
   },
 });

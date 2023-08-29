@@ -7,6 +7,7 @@ exports.createAcademicTerm = catchAsync(async (req, res) => {
   academicCount === 0 ? (type = "ier") : (type = "ième");
   const academicTermCreated = await AcademicTerm.create({
     name: `${academicCount + 1}${type} Semestre`,
+    createdBy: req.user._id,
   });
 
   // const { name } = req.body;

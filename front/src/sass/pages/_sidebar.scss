@@ -57,6 +57,11 @@
         fill: $white-color;
       }
     }
+    .active {
+      background-color: $color-tertiary;
+      color: $white-color;
+      fill: $white-color;
+    }
     &--link {
       display: block;
       text-decoration: none;
@@ -214,8 +219,8 @@
   .users__profile {
     width: 100% !important;
     position: absolute;
- right: 0;
- left: 0;
+    right: 0;
+    left: 0;
   }
 }
 // svg {
@@ -239,6 +244,7 @@
   .main-layout {
     // display: none;
     // width: 100%;
+    width: 100%;
     margin-left: 0;
     &--inactive {
       margin-left: 80px;

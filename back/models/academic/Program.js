@@ -11,7 +11,7 @@ const ProgramSchema = new Schema(
     },
     duration: {
       type: String,
-      required: true,
+      required: [true,"La durée du programme académique est réquise"],
     },
     // created automatically
     //CSFTY
@@ -29,11 +29,11 @@ const ProgramSchema = new Schema(
         );
       },
     },
-    // createdBy: {
-    //   type: Schema.Types.ObjectId,
-    //   ref: "Admin",
-    //   required: true,
-    // },
+    createdBy: {
+      type: Schema.Types.ObjectId,
+      ref: "Admin",
+      required: true,
+    },
     //we will push the teachers that are in charge of the program
     teachers: [
       {
