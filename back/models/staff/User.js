@@ -23,6 +23,10 @@ const userSchema = new mongoose.Schema(
         message: "Entrez une adresse mail valide",
       },
     },
+    adresse: {
+      type:String,
+      // required: [true, "L'adresse est obligatoire"],
+    },
     password: {
       type: String,
       required: [true, "Le mot de passe est obligatoire"],
@@ -33,7 +37,9 @@ const userSchema = new mongoose.Schema(
       type: String,
       default: undefined,
     },
-
+    birthday: {
+      type: Date,
+    },
     code: {
       type: String,
     },
@@ -46,7 +52,16 @@ const userSchema = new mongoose.Schema(
       type: String,
       default: "default.png",
     },
+    phoneNumber: {
+      type: String,
+    },
+    status: {
+      type: String,
+      enum: ["Bloqué", "Confirmé", "Confinement"],
+      default: "Confirmé",
+    },
     role: { type: String, required: true },
+
     passwordChangeAt: Date,
     passwordResetToken: String,
     passwordResetExpires: Date,
@@ -112,7 +127,8 @@ userSchema.methods.createPasswordResetToken = function () {
 userSchema.methods.saveWithPasswordConfirmValidation = async function () {
   return (
     this.passwordConfirm.trim().length >= 1 &&
-    (this.passwordConfirm && (this.passwordConfirm === this.password))
+    this.passwordConfirm &&
+    this.passwordConfirm === this.password
   );
 };
 

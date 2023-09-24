@@ -1,7 +1,7 @@
 const AppError = require("./../utils/appError");
 
 const handleJWTExpiredError = () =>
-  new AppError("Le token a expiré, connectez vous à nouveau",401);
+  new AppError("Le token a expiré, connectez vous à nouveau", 401);
 
 const handleJWTError = () =>
   new AppError("Token Invalide, Conntectez vous encore", 401);
@@ -18,8 +18,9 @@ const handleDuplicatesDB = (err) => {
 };
 const handleValidationErrorDB = (err) => {
   const errors = Object.values(err.errors).map((el) => el.message);
-  const message = `Invalid input data ${errors.join(". ")}`;
-  return new AppError(message, 400);
+  // const message = errors.join("\n");
+// console.log(err)
+  return new AppError(errors, 400);
 };
 
 const sendErrorDev = (err, res) => {
@@ -33,11 +34,11 @@ const sendErrorDev = (err, res) => {
 
 const sendErrorProd = (err, res) => {
   if (err.isOperational) {
-    console.log(err)
+    console.log(err);
     res.status(err.statusCode).json({
       status: err.status,
       message: err.message,
-      type:err?.type
+      type: err?.type,
     });
   } else {
     console.log(err);

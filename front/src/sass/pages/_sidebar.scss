@@ -237,7 +237,7 @@
   background-color: $color-primary;
   &--inactive {
     width: calc(100% - 8rem);
-    margin-left: 8rem;
+    margin-left: 8rem;    
   }
 }
 @include respond(tab-port) {

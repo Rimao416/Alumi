@@ -5,13 +5,17 @@ import academicYearReducer from "./academicYearSlice";
 import academicTermReducer from "./academicTermSlice";
 import classLevelReducer from "./classSlice";
 import academicProgramReducer from "./academicProgram";
+import academicTeacherReducer from "./adminTeacherSlice";
+import academicSubjectReducer from "./academicSubject";
 // import academicYearReducer from "./academicYearReducer";
 export const reducers = combineReducers({
   auth: authReducer,
   academicYearReducer,
   academicTermReducer,
   classLevelReducer,
-  academicProgramReducer
+  academicProgramReducer,
+  academicTeacherReducer,
+  academicSubjectReducer,
 });
 // export const store = configureStore({ auth: authReducer });
 // export const store = configureStore({

@@ -8,6 +8,7 @@ const adminRouter = require("./routes/staff/admin");
 const academicYearRouter = require("./routes/academics/academicYear");
 const academicTermRouter=require("./routes/academics/academicTerm")
 const classLevelRouter=require("./routes/academics/classLevel")
+const subjectRouter=require("./routes/academics/subject")
 const programRouter=require('./routes/academics/academicProgram')
 const cors = require("cors");
 const cookieParser=require("cookie-parser")
@@ -57,12 +58,13 @@ app.use((req, res, next) => {
 
 
 app.use("/api/v1/admins", adminRouter);
-app.use("/api/v1/teachers",teacherRouter)
+app.use("/api/v1/admin/teachers",teacherRouter)
 app.use('/api/v1/users',userRouter)
 app.use('/api/v1/academic-years',academicYearRouter)
 app.use('/api/v1/academic-terms',academicTermRouter)
 app.use('/api/v1/class-levels',classLevelRouter)
 app.use('/api/v1/academic-programs',programRouter)
+app.use('/api/v1/academic-subjects',subjectRouter)
 
 
 // app.use("/api/v1/academic-years", academicYearRouter);

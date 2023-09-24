@@ -10,6 +10,11 @@ import PasswordReset from "./pages/PasswordReset";
 import AcademicTerm from "./pages/Admin/AcademicTerm";
 import ClassLevel from "./pages/Admin/ClassLevel";
 import AcademicProgram from "./pages/Admin/AcademicProgram";
+import Teacher from "./pages/Admin/Teacher";
+import TeacherCreate from "./pages/Admin/TeacherCreate";
+import 'react-phone-input-2/lib/style.css'
+import TeacherInfo from "./pages/Admin/TeacherInfo";
+import AcademicSubject from "./pages/Admin/AcademicSubject";
 
 function App() {
   return (
@@ -22,13 +27,25 @@ function App() {
         <Route path="/admin" element={<AcademicYear />} />
       </Route>
       <Route element={<ProtectedRoutes roles={["Admin"]} />}>
-        <Route path="/terms" element={<AcademicTerm />} />
+        <Route path="/admin/teacher" element={<Teacher />} />
       </Route>
       <Route element={<ProtectedRoutes roles={["Admin"]} />}>
-        <Route path="/class" element={<ClassLevel />} />
+        <Route path="/admin/teacher/add" element={<TeacherCreate />} />
       </Route>
       <Route element={<ProtectedRoutes roles={["Admin"]} />}>
-        <Route path="/program" element={<AcademicProgram />} />
+        <Route path="/admin/teacher/:id" element={<TeacherInfo />} />
+      </Route>
+      <Route element={<ProtectedRoutes roles={["Admin"]} />}>
+        <Route path="/admin/terms" element={<AcademicTerm />} />
+      </Route>
+      <Route element={<ProtectedRoutes roles={["Admin"]} />}>
+        <Route path="/admin/class" element={<ClassLevel />} />
+      </Route>
+      <Route element={<ProtectedRoutes roles={["Admin"]} />}>
+        <Route path="/admin/program" element={<AcademicProgram />} />
+      </Route>
+      <Route element={<ProtectedRoutes roles={["Admin"]} />}>
+        <Route path="/admin/subjects" element={<AcademicSubject />} />
       </Route>
     </Routes>
   );

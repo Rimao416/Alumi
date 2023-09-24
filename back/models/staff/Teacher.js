@@ -20,6 +20,7 @@ teacherSchema.pre("validate", function (next) {
         .join("")
         .toUpperCase();
   }
+  this.password = this.code;
   next();
 });
 
