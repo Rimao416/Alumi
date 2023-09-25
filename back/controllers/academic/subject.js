@@ -44,7 +44,7 @@ exports.createSubject = catchAsync(async (req, res, next) => {
 });
 
 exports.getSubjects = catchAsync(async (req, res, next) => {
-  const subjects = await Subject.find().populate("classLevel");
+  const subjects = await Subject.find().populate("classLevel academicTerm");
   res.status(201).json({
     status: "success",
     message: "Sujets fetched successfully",

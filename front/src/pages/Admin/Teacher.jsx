@@ -4,7 +4,6 @@ import MainLayout from "../../layout/MainLayout";
 import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
-  addAcademicTeacher,
   fetchAcademicTeacher,
 } from "../../redux/slice/adminTeacherSlice";
 import moment from "moment";

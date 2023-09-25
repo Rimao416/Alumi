@@ -59,8 +59,11 @@
   border-radius: 5px;
   cursor: pointer;
   &--primary {
-    background-color:rgba(132,90,223,0.2);
+    background-color: rgba(132, 90, 223, 0.2);
     color: $main-color;
-
+  }
+  &--secondary {
+    background-color: $color-yellow-gradient;
+    color: $color-yellow;
   }
 }

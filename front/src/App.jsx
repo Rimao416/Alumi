@@ -12,9 +12,10 @@ import ClassLevel from "./pages/Admin/ClassLevel";
 import AcademicProgram from "./pages/Admin/AcademicProgram";
 import Teacher from "./pages/Admin/Teacher";
 import TeacherCreate from "./pages/Admin/TeacherCreate";
-import 'react-phone-input-2/lib/style.css'
+import "react-phone-input-2/lib/style.css";
 import TeacherInfo from "./pages/Admin/TeacherInfo";
 import AcademicSubject from "./pages/Admin/AcademicSubject";
+import SubjectCreate from "./pages/Admin/SubjectCreate";
 
 function App() {
   return (
@@ -46,6 +47,12 @@ function App() {
       </Route>
       <Route element={<ProtectedRoutes roles={["Admin"]} />}>
         <Route path="/admin/subjects" element={<AcademicSubject />} />
+      </Route>
+      <Route element={<ProtectedRoutes roles={["Admin"]} />}>
+        <Route path="/admin/subjects/create" element={<SubjectCreate />} />
+      </Route>
+      <Route element={<ProtectedRoutes roles={["Admin"]} />}>
+        <Route path="/admin/subjects/edit/:_id" element={<SubjectCreate />} />
       </Route>
     </Routes>
   );
