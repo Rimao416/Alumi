@@ -5,6 +5,7 @@ import { API } from "../../config";
 import {
   addWithAuthorization,
   fetchWithAuthorization,
+  updateWithAuthorization
 } from "../../utils/handleFactory";
 API.defaults.withCredentials = true;
 export const fetchAcademicSubjects = createAsyncThunk(
@@ -23,10 +24,21 @@ export const addAcademicSubjects = createAsyncThunk(
     );
   }
 );
-export const getSingleSubject = createAsyncThunk(
-  "academicSubjects/getSingleSubject",
+export const fetchSingleSubject = createAsyncThunk(
+  "academicSubjects/fetchSingleSubject",
   async (id) => {
     return fetchWithAuthorization(`/api/v1/academic-subjects/${id}`);
+  }
+);
+
+export const updateAcademicSubjects = createAsyncThunk(
+  "academicSubjects/updateAcademicSubjects",
+  async (newSubject) => {
+    return updateWithAuthorization(
+      `/api/v1/academic-subjects/${newSubject._id}`,
+      newSubject,
+      "subjectUpdated"
+    );
   }
 )
 
@@ -63,7 +75,27 @@ let academicSubject = createSlice({
         state.error = true;
         // state.errorType = action.payload;
         state.status = "rejected";
-      });
+      })
+      .addCase(updateAcademicSubjects.pending, (state) => {
+        state.loading = true;
+        state.error = false;
+        state.status = "idle";
+      })
+      .addCase(updateAcademicSubjects.fulfilled, (state, action) => {
+       
+        state.loading = false;
+        state.error = false;
+        state.academicSubject = action.payload.data;
+        state.status = "success";
+      })
+      .addCase(updateAcademicSubjects.rejected, (state) => {
+        state.loading = false;
+        state.error = true;
+        // state.errorType = action.payload;
+        state.status = "rejected";
+      })
+      
+
   },
 });
 export const { initializeSubject } = academicSubject.actions;

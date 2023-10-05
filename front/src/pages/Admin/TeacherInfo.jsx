@@ -3,7 +3,6 @@ import Background from "../../assets/img/TEXTURE_ECOLE.png";
 import MainLayout from "../../layout/MainLayout";
 import { useSelector } from "react-redux";
 import { useEffect, useState } from "react";
-import moment from "moment";
 function TeacherInfo() {
   const { id } = useParams();
   const { academicTeacher } = useSelector(

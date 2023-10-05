@@ -23,7 +23,7 @@ exports.createClassLevel = catchAsync(async (req, res, next) => {
 });
 
 exports.getClassLevels = catchAsync(async (req, res, next) => {
-  const classLevels = await ClassLevel.find();
+  const classLevels = await ClassLevel.find().populate('subjects');
   res.status(201).json({
     status: "success",
     message: "Class levels fetched successfully",

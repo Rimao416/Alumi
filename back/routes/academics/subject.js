@@ -8,6 +8,7 @@ subjectProgramRouter.use(authController.protect);
 subjectProgramRouter.use(authController.restrictTo("Admin"));
 subjectProgramRouter.route("/").post(subjectProgramController.createSubject);
 subjectProgramRouter.route("/").get(subjectProgramController.getSubjects);
+subjectProgramRouter.route("/:id").put(subjectProgramController.updateSubjects);
 
 // subjectProgramRouter.route("/").post(academicProgramController.createProgram);
 

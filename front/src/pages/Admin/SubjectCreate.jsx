@@ -13,6 +13,7 @@ import { useParams } from "react-router-dom";
 import {
   addAcademicSubjects,
   initializeSubject,
+  updateAcademicSubjects,
 } from "../../redux/slice/academicSubject";
 import { useNavigate } from "react-router-dom";
 function SubjectCreate() {
@@ -34,11 +35,10 @@ function SubjectCreate() {
     if (status === "success") {
       navigate("/admin/subjects");
     }
-  }, [status]);
+  }, [status, navigate]);
   const { academicTeacher } = useSelector(
     (state) => state.academicTeacherReducer
   );
-  const [subject,setSubject] = useState([])
   const { academicTerm } = useSelector((state) => state.academicTermReducer);
   const { classLevel } = useSelector((state) => state.classLevelReducer);
   const classOptions = classLevel.map((classObj) => ({
@@ -51,14 +51,48 @@ function SubjectCreate() {
     teacher: "",
     classLevel: [],
   });
+  const [selectedClasses, setSelectedClasses] = useState([]);
   useEffect(() => {
     if (_id) {
       const subject = academicSubject.find((item) => item._id === _id);
-      
       setData(subject);
+      console.log(subject);
+let subjectOptionsTemp=[];
+      subject.classLevel.map((item) => {
+        // const subjectOptionsTemp
+        subjectOptionsTemp.push({
+          value: item._id,
+          label: item.name,
+        })
+
+      });
+      // console.log(subjectOptionsTemp);
+      setSelectedClasses(subjectOptionsTemp);
+
+
+      // if(subject.classLevel.length==1){
+      //   setSelectedClasses(() => [
+      //     {
+      //       value: subject.classLevel[0]._id,
+      //       label: subject.classLevel[0].name,
+      //     },
+      //   ]);
+      // }else {
+      //   subject.classLevel.map((item) => {
+      //   setSelectedClasses((prevState) => [
+      //     ...prevState,
+      //     {
+      //       value: item._id,
+      //       label: item.name,
+      //     },
+      //   ]);
+      // });
+      // }
+    } else {
+      //
     }
-  }, [_id]);
-  const [selectedClasses, setSelectedClasses] = useState([]);
+  }, [_id, academicSubject]);
+
   const handleChange = (e) => {
     setData({ ...data, [e.target.name]: e.target.value });
   };
@@ -94,8 +128,13 @@ function SubjectCreate() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    dispatch(addAcademicSubjects(data));
-    navigate("/admin/subjects");
+    if (_id) {
+      console.log("Je t'envoie");
+      dispatch(updateAcademicSubjects(data));
+    } else {
+      dispatch(addAcademicSubjects(data));
+    }
+    // navigate("/admin/subjects");
     // console.log(data);
   };
   return (
@@ -108,8 +147,10 @@ function SubjectCreate() {
               placeholder="Entrez le nom du cours actuel"
               name="name"
               onChange={handleChange}
+              valeur={data.name}
             />
           </FormGroup>
+          <p>{data.name}</p>
         </div>
         <div className="form__layout--wrapper">
           <FormGroup label="Période Académique">
@@ -122,7 +163,7 @@ function SubjectCreate() {
               ))}
             </Select>
             {_id && (
-                <p>La période académique actuelle est {data.academicTerm.name}</p>
+              <p>La période académique actuelle est {data.academicTerm.name}</p>
             )}
           </FormGroup>
         </div>
@@ -150,7 +191,7 @@ function SubjectCreate() {
           </FormGroup>
         </div>
         <MainButton
-          text="Enregistrer"
+          text={_id ? "Modifier" : "Enregistrer"}
           isDisabled={false}
           type="submit"
           classname="main-button"

@@ -31,3 +31,21 @@ export const addWithAuthorization = async (url, data, returndataKey) => {
     throw error.response.data;
   }
 };
+
+export const updateWithAuthorization = async (url, data, returndataKey) => {
+  try {
+    const { token } = JSON.parse(localStorage.getItem("profile"));
+    API.defaults.headers.common["Authorization"] = `Bearer ${token}`;
+    const response = await API.put(url, data);
+    console.log(response);
+    toast.success(response.data.message);
+    return response.data[returndataKey];
+  } catch (error) {
+    console.error(error);
+    toast.error(
+      error.response.data.message ||
+        "Une erreur est survenue lors de la connexion."
+    );
+    throw error.response.data;
+  }
+}

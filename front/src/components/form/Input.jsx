@@ -1,6 +1,6 @@
 import React from "react";
 
-function Input({ type, placeholder, name,onChange }) {
+function Input({ type, placeholder, name,onChange,valeur="" }) {
   return (
     <input
       className="auth__form--input input--form u-margin-top-small"
@@ -8,6 +8,8 @@ function Input({ type, placeholder, name,onChange }) {
       placeholder={placeholder}
       name={name}
       onChange={onChange}
+      value={valeur}
+      // defaultValue={"Safd"}
     />
   );
 }

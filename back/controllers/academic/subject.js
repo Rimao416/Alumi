@@ -51,3 +51,44 @@ exports.getSubjects = catchAsync(async (req, res, next) => {
     data: subjects,
   });
 });
+
+exports.updateSubjects = catchAsync(async (req, res, next) => {
+  const { name, academicTerm, classLevel, teacher } = req.body;
+  const uniqueClassLevel = [...new Set(classLevel)];
+  //   Un sujet doit avoir au moins une classe
+  if (!uniqueClassLevel || uniqueClassLevel.length === 0) {
+    return next(
+      new AppError("Une matière doit avoir au moins une classe", 400)
+    );
+  }
+  const subjectUpdated = await Subject.findByIdAndUpdate(
+    req.params.id,
+    {
+      name,
+      academicTerm,
+      uniqueClassLevel,
+      teacher,
+    },
+    {
+      new: true,
+    }
+  );
+  const classLevelUpdated = await classLevelModel.updateMany(
+    { subjects: req.params.id },
+    { $pull: { subjects: req.params.id } }
+  );
+  console.log(classLevelUpdated);
+
+  const classLevelAdd = await classLevelModel.updateMany(
+    { _id: { $in: uniqueClassLevel } },
+    { $addToSet: { subjects: req.params.id } }
+  );
+  console.log(classLevelAdd);
+
+  res.status(201).json({
+    status: "success",
+    message: "Sujet modifié avec succès",
+    subjectUpdated,
+  });
+  console.log(req.body);
+});
