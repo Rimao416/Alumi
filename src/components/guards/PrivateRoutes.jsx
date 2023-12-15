@@ -1,7 +1,8 @@
-import { useSelector } from "react-redux";
+import { useSelector, useEffect } from "react-redux";
 import { Navigate } from "react-router-dom";
 function PrivateRoutes() {
   const isAuthenticated = useSelector((state) => state.authSlice.user?.user);
+//   useEffect(() => {});
 
   if (isAuthenticated) {
     const role = isAuthenticated.role;
@@ -19,7 +20,7 @@ function PrivateRoutes() {
     }
   } else {
     // Redirige vers la page de connexion si l'utilisateur n'est pas authentifié
-    return <Navigate to="/" replace />;
+    return <Navigate to="/" />;
   }
 }
 
