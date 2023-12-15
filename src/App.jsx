@@ -108,34 +108,38 @@ const ProjectDetailsPage = lazy(() =>
 const KanbanPage = lazy(() => import("./pages/app/kanban"));
 const CalenderPage = lazy(() => import("./pages/app/calender"));
 import Loading from "@/components/Loading";
+import ProtectedRoutes from "./components/guards/ProtectedRoutes";
+import PrivateRoutes from "./components/guards/PrivateRoutes";
 function App() {
   return (
     <main className="App  relative">
       <Routes>
-        <Route
-          path="/"
-          element={
-            <Suspense fallback={<Loading />}>
-              <Login />
-            </Suspense>
-          }
-        />
-        <Route
+        <Route element={<PrivateRoutes />}>
+          <Route
+            path="/login"
+            element={
+              <Suspense fallback={<Loading />}>
+                <Login />
+              </Suspense>
+            }
+          />
+        </Route>
+        {/* <Route
           path="/login2"
           element={
             <Suspense fallback={<Loading />}>
               <Login2 />
             </Suspense>
           }
-        />
-        <Route
+        /> */}
+        {/* <Route
           path="/login3"
           element={
             <Suspense fallback={<Loading />}>
               <Login3 />
             </Suspense>
           }
-        />
+        /> */}
         <Route
           path="/register"
           element={
@@ -209,7 +213,9 @@ function App() {
           }
         />
         <Route path="/*" element={<Layout />}>
-          <Route path="dashboard" element={<Dashboard />} />
+          <Route element={<ProtectedRoutes roles={["Admin"]} />}>
+            <Route path="dashboard" element={<Dashboard />} />
+          </Route>
           <Route path="ecommerce" element={<Ecommerce />} />
           <Route path="crm" element={<CrmPage />} />
           <Route path="project" element={<ProjectPage />} />

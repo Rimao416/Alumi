@@ -6,7 +6,7 @@ import project from "../pages/app/projects/store";
 import kanban from "../pages/app/kanban/store";
 import calendar from "../pages/app/calender/store";
 import auth from "../pages/auth/common/store";
-
+import authSlice from "../slice/authSlice";
 const rootReducer = {
   layout,
   todo,
@@ -16,5 +16,6 @@ const rootReducer = {
   kanban,
   calendar,
   auth,
+  authSlice,
 };
 export default rootReducer;

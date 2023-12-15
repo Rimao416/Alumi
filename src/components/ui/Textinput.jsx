@@ -5,7 +5,7 @@ import "cleave.js/dist/addons/cleave-phone.us";
 const Textinput = ({
   type,
   label,
-  placeholder = "Add placeholder",
+  placeholder = "Entrez une valeur",
   classLabel = "form-label",
   className = "",
   classGroup = "",

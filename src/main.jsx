@@ -9,14 +9,17 @@ import { BrowserRouter } from "react-router-dom";
 import "react-toastify/dist/ReactToastify.css";
 import { Provider } from "react-redux";
 import store from "./store";
+import myStore from "./state/ReduxStore";
 import "react-toastify/dist/ReactToastify.css";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <>
     <BrowserRouter>
-      <Provider store={store}>
-        <App />
-      </Provider>
+      {/* <Provider store={myStore}> */}
+        <Provider store={store}>
+          <App />
+        </Provider>
+      {/* </Provider> */}
     </BrowserRouter>
   </>
 );

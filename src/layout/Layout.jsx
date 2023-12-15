@@ -14,19 +14,19 @@ import MobileMenu from "../components/partials/sidebar/MobileMenu";
 import useMobileMenu from "@/hooks/useMobileMenu";
 import MobileFooter from "@/components/partials/footer/MobileFooter";
 import { ToastContainer } from "react-toastify";
-import { useSelector } from "react-redux";
+// import { useSelector } from "react-redux";
 import Loading from "@/components/Loading";
 const Layout = () => {
   const { width, breakpoints } = useWidth();
   const [collapsed] = useSidebar();
-  const navigate = useNavigate();
-  const { isAuth } = useSelector((state) => state.auth);
+  // const navigate = useNavigate();
+  // const { isAuth } = useSelector((state) => state.auth);
 
-  useEffect(() => {
-    if (!isAuth) {
-      navigate("/");
-    }
-  }, [isAuth, navigate]);
+  // useEffect(() => {
+  //   if (!isAuth) {
+  //     navigate("/");
+  //   }
+  // }, [isAuth, navigate]);
   const switchHeaderClass = () => {
     if (menuType === "horizontal" || menuHidden) {
       return "ltr:ml-0 rtl:mr-0";

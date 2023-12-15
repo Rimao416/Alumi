@@ -3,89 +3,91 @@ import Textinput from "@/components/ui/Textinput";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
-import { useNavigate } from "react-router-dom";
-import Checkbox from "@/components/ui/Checkbox";
 import { Link } from "react-router-dom";
-import { useSelector, useDispatch } from "react-redux";
-import { handleLogin } from "./store";
-import { toast } from "react-toastify";
+import { useDispatch } from "react-redux";
+import { login } from "../../../slice/authSlice";
 const schema = yup
   .object({
-    email: yup.string().email("Invalid email").required("Email is Required"),
-    password: yup.string().required("Password is Required"),
+    identifier: yup.string().required("L'identifiant est requis"),
+    password: yup.string().required("Le mot de passe est requis"),
   })
   .required();
 const LoginForm = () => {
   const dispatch = useDispatch();
-  const { users } = useSelector((state) => state.auth);
+  const [credentials, setCredentials] = useState({
+    identifier: "",
+    password: "",
+  });
   const {
     register,
     formState: { errors },
-    handleSubmit,
   } = useForm({
     resolver: yupResolver(schema),
     //
     mode: "all",
   });
-  const navigate = useNavigate();
-  const onSubmit = (data) => {
-    const user = users.find(
-      (user) => user.email === data.email && user.password === data.password
-    );
-    if (user) {
-      dispatch(handleLogin(true));
-      setTimeout(() => {
-        navigate("/dashboard");
-      }, 1500);
-    } else {
-      toast.error("Invalid credentials", {
-        position: "top-right",
-        autoClose: 1500,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: "light",
-      });
-    }
+  // const navigate = useNavigate();
+  const handleChange = (e) => {
+    setCredentials({
+      ...credentials,
+      [e.target.name]: e.target.value,
+    });
+  };
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    console.log(credentials);
+    dispatch(login(credentials));
+    // if (user) {
+    //   dispatch(handleLogin(true));
+    //   setTimeout(() => {
+    //     navigate("/dashboard");
+    //   }, 1500);
+    // } else {
+    //   toast.error("Invalid credentials", {
+    //     position: "top-right",
+    //     autoClose: 1500,
+    //     hideProgressBar: false,
+    //     closeOnClick: true,
+    //     pauseOnHover: true,
+    //     draggable: true,
+    //     progress: undefined,
+    //     theme: "light",
+    //   });
+    // }
   };
 
-  const [checked, setChecked] = useState(false);
-
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="space-y-4 ">
+    <form onSubmit={handleSubmit} className="space-y-4 ">
       <Textinput
-        name="email"
-        label="email"
-        defaultValue={users[0].email}
-        type="email"
+        name="identifier"
+        label="Adresse de connexion ou Code"
+        defaultValue={credentials.identifier}
+        type="text"
         register={register}
-        error={errors.email}
+        error={errors.identifier}
+        onChange={handleChange}
       />
       <Textinput
         name="password"
-        label="passwrod"
+        label="Mot de passe"
         type="password"
-        defaultValue={users[0].password}
+        defaultValue={credentials.password}
         register={register}
         error={errors.password}
+        onChange={handleChange}
       />
       <div className="flex justify-between">
-        <Checkbox
-          value={checked}
-          onChange={() => setChecked(!checked)}
-          label="Keep me signed in"
-        />
         <Link
           to="/forgot-password"
           className="text-sm text-slate-800 dark:text-slate-400 leading-6 font-medium"
         >
-          Forgot Password?{" "}
+          Mot de passe oublié ?{" "}
         </Link>
       </div>
 
-      <button className="btn btn-dark block w-full text-center">Sign in</button>
+      <button className="btn btn-dark block w-full text-center">
+        Connexion
+      </button>
     </form>
   );
 };
