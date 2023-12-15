@@ -116,7 +116,7 @@ function App() {
       <Routes>
         <Route element={<PrivateRoutes />}>
           <Route
-            path="/login"
+            path="/"
             element={
               <Suspense fallback={<Loading />}>
                 <Login />
