@@ -114,7 +114,7 @@ function App() {
   return (
     <main className="App  relative">
       <Routes>
-        {/* <Route element={<PrivateRoutes />}> */}
+        <Route element={<PrivateRoutes />}>
           <Route
             path="/"
             element={
@@ -123,7 +123,7 @@ function App() {
               </Suspense>
             }
           />
-        {/* </Route> */}
+        </Route>
         {/* <Route
           path="/login2"
           element={
