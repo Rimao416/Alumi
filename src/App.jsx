@@ -105,24 +105,36 @@ const ProjectPostPage = lazy(() => import("./pages/app/projects"));
 const ProjectDetailsPage = lazy(() =>
   import("./pages/app/projects/project-details")
 );
+
 const KanbanPage = lazy(() => import("./pages/app/kanban"));
 const CalenderPage = lazy(() => import("./pages/app/calender"));
 import Loading from "@/components/Loading";
 import ProtectedRoutes from "./components/guards/ProtectedRoutes";
 import PrivateRoutes from "./components/guards/PrivateRoutes";
+
+// MY PAGES
+
+const Professeurs = lazy(() => import("./pages/admin/teacher"));
+const ProfesseursAddPage = lazy(() =>
+  import("./pages/admin/teacher/teacher-add")
+);
+const ProfesseursView = lazy(() =>
+  import("./pages/admin/teacher/teacher-see")
+);
+// const  =lazy(() => import("./pages/admin/teacher"));
 function App() {
   return (
     <main className="App  relative">
       <Routes>
         {/* <Route element={<PrivateRoutes />}> */}
-          <Route
-            path="/"
-            element={
-              <Suspense fallback={<Loading />}>
-                <Login />
-              </Suspense>
-            }
-          />
+        <Route
+          path="/"
+          element={
+            <Suspense fallback={<Loading />}>
+              <Login />
+            </Suspense>
+          }
+        />
         {/* </Route> */}
         {/* <Route
           path="/login2"
@@ -220,6 +232,9 @@ function App() {
           <Route path="crm" element={<CrmPage />} />
           <Route path="project" element={<ProjectPage />} />
           <Route path="banking" element={<BankingPage />} />
+          <Route path="professeurs" element={<Professeurs />} />
+          <Route path="professeurs-create" element={<ProfesseursAddPage />} />
+          <Route path="professeurs-view/:id" element={<ProfesseursView />} />
           {/* App pages */}
           <Route path="todo" element={<TodoPage />} />
           <Route path="email" element={<EmailPage />} />

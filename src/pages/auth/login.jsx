@@ -6,8 +6,8 @@ import {useSelector} from "react-redux"
 import { ToastContainer } from "react-toastify";
 
 // image import
-import LogoWhite from "@/assets/images/logo/logo-white.svg";
-import Logo from "@/assets/images/logo/logo.svg";
+import LogoWhite from "@/assets/images/logo/login.svg";
+import Logo from "@/assets/images/logo/logo_2.svg";
 import Illustration from "@/assets/images/auth/ils1.svg";
 
 const login = () => {
@@ -28,7 +28,7 @@ const login = () => {
             </div>
             <div className="absolute left-0 2xl:bottom-[-160px] bottom-[-130px] h-full w-full z-[-1]">
               <img
-                src={Illustration}
+                src={Logo}
                 alt=""
                 className="h-full w-full object-contain"
               />

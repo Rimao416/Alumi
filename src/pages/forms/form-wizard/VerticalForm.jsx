@@ -1,69 +1,78 @@
 import React, { useState, useEffect } from "react";
 import Textinput from "@/components/ui/Textinput";
 import InputGroup from "@/components/ui/InputGroup";
-import Textarea from "@/components/ui/Textarea";
+// import Textarea from "@/components/ui/Textarea";
 import Button from "@/components/ui/Button";
 import Card from "@/components/ui/Card";
 import Icon from "@/components/ui/Icon";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
+import SelectForm from "../select/SelectForm";
+import DropZoneFile from "../file-input/DropZoneFile";
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { addAcademicTeacher } from "../../../slice/admin/teacherSlice";
 
 const steps = [
   {
     id: 1,
-    title: "Account Details",
+    title: "Détails du compte",
   },
   {
     id: 2,
-    title: "Personal info-500",
+    title: "Informations uniques",
   },
   {
     id: 3,
-    title: "Address",
-  },
-  {
-    id: 4,
-    title: "Social Links",
+    title: "Media",
   },
 ];
 
 let stepSchema = yup.object().shape({
-  username: yup.string().required(" User name is required"),
-  fullname: yup.string().required("Full name is required"),
-  email: yup.string().email("Email is not valid").required("Email is required"),
-  phone: yup.string().required("Phone number is required"),
+  name: yup.string().required("Le nom est requis"),
+  lastname: yup.string().required("Le prenom est requis"),
+  adresse: yup.string().required("L'adresse est requise"),
+  birthday: yup
+    .date()
+    .transform((originalValue, originalObject) => {
+      console.log(originalValue);
+      console.log(originalObject);
+      // Utilisez la transformation pour gérer la conversion de la date
+      return originalObject ? new Date(originalObject) : null;
+    })
+    .nullable(true)
+    .required("La date de naissance est requise"),
   // .matches(/^[0-9]{12}$/, "Phone number is not valid"),
-  password: yup
-    .string()
-    .required("Password is required")
-    .min(8, "Password must be at least 8 characters"),
-  confirmpass: yup
-    .string()
-    .required("Confirm Password is required")
-    .oneOf([yup.ref("password"), null], "Passwords must match"),
 });
 
 let personalSchema = yup.object().shape({
-  fname: yup.string().required(" First name is required"),
-  lname: yup.string().required(" Last name is required"),
+  email: yup
+    .string()
+    .email("L'email n'est pas valide")
+    .required("L'email est requis"),
+  phoneNumber: yup
+    .string()
+    .required("Le numéro de téléphone est requis")
+    .matches(/^[0-9]{1,12}$/, "Entrez un numéro valide"),
+  idNumber: yup.string().required("L'identifiant est requis"),
 });
 let addressSchema = yup.object().shape({
-  address: yup.string().required(" Address is required"),
+  address: yup.string(),
 });
-const url =
-  /^((ftp|http|https):\/\/)?(www.)?(?!.*(ftp|http|https|www.))[a-zA-Z0-9_-]+(\.[a-zA-Z]+)+((\/)[\w#]+)*(\/\w+\?[a-zA-Z0-9_]+=\w+(&[a-zA-Z0-9_]+=\w+)*)?$/gm;
 
-let socialSchema = yup.object().shape({
-  fburl: yup
-    .string()
-    .required("Facebook url is required")
-    // .matches(url, "Facebook url is not valid"),
-});
-const FormWizard = () => {
+const FormWizard = ({ title }) => {
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const [teacher, setTeacher] = useState({
+    photo: "",
+    sexe: "Homme",
+  });
+
   const [stepNumber, setStepNumber] = useState(0);
+  const { loading } = useSelector((state) => state.teacherSlice);
 
-  // find current step schema
+  // find current stepschema
   let currentStepSchema;
   switch (stepNumber) {
     case 0:
@@ -72,12 +81,10 @@ const FormWizard = () => {
     case 1:
       currentStepSchema = personalSchema;
       break;
-    case 2:
-      currentStepSchema = addressSchema;
-      break;
-    case 3:
-      currentStepSchema = socialSchema;
-      break;
+    // case 2:
+    //   currentStepSchema = addressSchema;
+    //   break;
+
     default:
       currentStepSchema = stepSchema;
   }
@@ -89,12 +96,18 @@ const FormWizard = () => {
     register,
     formState: { errors },
     handleSubmit,
+
     watch,
   } = useForm({
     resolver: yupResolver(currentStepSchema),
     // keep watch on all fields
     mode: "all",
   });
+  //   const handleSubmit=(event)=>{
+  //     event.preventDefault()
+  //     console.log(teacher)
+  //     console.log(teacher)
+  //   }
 
   const onSubmit = (data) => {
     // next step until last step . if last step then submit form
@@ -102,6 +115,31 @@ const FormWizard = () => {
     const isLastStep = stepNumber === totalSteps - 1;
     if (isLastStep) {
       console.log(data);
+      console.log(teacher);
+      const sendData = { ...data, photo: teacher.photo };
+      console.log(sendData);
+      //   CREATE FORM DATA
+      const formData = new FormData();
+      formData.append("name", sendData.name);
+      formData.append("lastname", sendData.lastname);
+      formData.append("birthday", sendData.birthday);
+      formData.append("email", sendData.email);
+      formData.append("phoneNumber", sendData.phoneNumber);
+      //   formData.append("idNumber", sendData.idNumber);
+      formData.append("address", sendData.address);
+      formData.append("photo", sendData.photo);
+      formData.append("sexe", teacher.sexe);
+      //   SEND DATA
+      dispatch(addAcademicTeacher(formData))
+        .then(() => {
+          // Code à exécuter après la réussite de l'action
+          //   console.log("Action réussie avec la réponse :", response);
+          navigate("/professeurs");
+        })
+        .catch((error) => {
+          // Code à exécuter en cas d'échec de l'action
+          console.error("Erreur lors de l'envoi de la requête :", error);
+        });
     } else {
       setStepNumber(stepNumber + 1);
     }
@@ -110,9 +148,12 @@ const FormWizard = () => {
   const handlePrev = () => {
     setStepNumber(stepNumber - 1);
   };
+  //   const handleFile = (e) => {
+  //     setTeacher({ ...teacher, [e.target.name]: e.target.files[0] });
+  //   };
   return (
     <div>
-      <Card title="Vertical">
+      <Card title={title}>
         <div className="grid gap-5 grid-cols-12">
           <div className="lg:col-span-3 col-span-12">
             <div className="flex z-[5] items-start relative flex-col lg:min-h-full md:min-h-[300px] min-h-[250px]">
@@ -164,59 +205,56 @@ const FormWizard = () => {
                   <div className="grid lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-5">
                     <div className="lg:col-span-3 md:col-span-2 col-span-1">
                       <h4 className="text-base text-slate-800 dark:text-slate-300 mb-6">
-                        Enter Your Account Details
+                        Entrez les détails du compte
                       </h4>
                     </div>
                     <Textinput
-                      label="Username"
+                      label="Nom"
                       type="text"
-                      placeholder="Type your User Name"
-                      name="username"
-                      error={errors.username}
+                      placeholder="Entrez le nom"
+                      name="name"
+                      error={errors.name}
                       register={register}
                     />
                     <Textinput
-                      label="Full name"
+                      label="Prenom"
                       type="text"
-                      placeholder="Full name"
-                      name="fullname"
-                      error={errors.fullname}
+                      placeholder="Entrez le prenom"
+                      name="lastname"
+                      error={errors.lastname}
                       register={register}
                     />
                     <Textinput
-                      label="Email"
-                      type="email"
-                      placeholder="Type your email"
-                      name="email"
-                      error={errors.email}
-                      register={register}
-                    />
-                    <InputGroup
-                      label="Phone Number"
+                      label="Adresse"
                       type="text"
-                      prepend="MY (+6)"
-                      placeholder="Phone Number"
-                      name="phone"
-                      error={errors.phone}
+                      placeholder="Entrez l'adresse de résidence"
+                      name="adresse"
+                      error={errors.adresse}
                       register={register}
                     />
                     <Textinput
-                      label="Password"
-                      type="password"
-                      placeholder="8+ characters, 1 capitat letter "
-                      name="password"
-                      error={errors.password}
-                      hasicon
+                      label="Date de naissance"
+                      type="date"
+                      placeholder="Entrez l'adresse de résidence"
+                      name="birthday"
+                      error={errors.birthday}
                       register={register}
                     />
-                    <Textinput
-                      label="Confirm Password"
-                      type="password"
-                      placeholder="Password"
-                      name="confirmpass"
-                      error={errors.confirmpass}
-                      register={register}
-                      hasicon
+                    <SelectForm
+                      data={teacher}
+                      setData={setTeacher}
+                      header="sexe"
+                      title="Sexe"
+                      options={[
+                        {
+                          value: "Homme",
+                          label: "Homme",
+                        },
+                        {
+                          value: "Femme",
+                          label: "Femme",
+                        },
+                      ]}
                     />
                   </div>
                 </div>
@@ -227,23 +265,33 @@ const FormWizard = () => {
                   <div className="grid md:grid-cols-2 grid-cols-1 gap-5">
                     <div className="md:col-span-2 col-span-1">
                       <h4 className="text-base text-slate-800 dark:text-slate-300 mb-6">
-                        Enter Your Personal info-500
+                        Informations Uniques
                       </h4>
                     </div>
+
                     <Textinput
-                      label="First name"
-                      type="text"
-                      placeholder="First name"
-                      name="fname"
-                      error={errors.fname}
+                      label="Email"
+                      type="email"
+                      placeholder="Tapez le mail"
+                      name="email"
+                      error={errors.email}
                       register={register}
                     />
                     <Textinput
-                      label="Last name"
+                      label="CIN/Passeport"
                       type="text"
-                      placeholder="Last name"
-                      name="lname"
-                      error={errors.lname}
+                      placeholder="Entrez le n° CIN/Passeport"
+                      name="idNumber"
+                      error={errors.idNumber}
+                      register={register}
+                    />
+                    <InputGroup
+                      label="Phone Number"
+                      type="text"
+                      prepend="MY  (+216)"
+                      placeholder="Phone Number"
+                      name="phoneNumber"
+                      error={errors.phoneNumber}
                       register={register}
                     />
                   </div>
@@ -251,40 +299,7 @@ const FormWizard = () => {
               )}
               {stepNumber === 2 && (
                 <div>
-                  <div className="grid grid-cols-1 gap-5">
-                    <div className="">
-                      <h4 className="text-base text-slate-800 dark:text-slate-300 mb-6">
-                        Enter Your Address
-                      </h4>
-                    </div>
-                    <Textarea
-                      label="Address"
-                      type="text"
-                      placeholder="Write Address"
-                      name="address"
-                      error={errors.address}
-                      register={register}
-                    />
-                  </div>
-                </div>
-              )}
-              {stepNumber === 3 && (
-                <div>
-                  <div className="grid lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-5">
-                    <div className="lg:col-span-3 md:col-span-2 col-span-1">
-                      <h4 className="text-base text-slate-800 dark:text-slate-300 mb-6">
-                        Enter Your Address
-                      </h4>
-                    </div>
-                    <Textinput
-                      label="Facebook"
-                      type="text"
-                      placeholder="https://www.facebook.com/profile"
-                      name="fburl"
-                      error={errors.fburl}
-                      register={register}
-                    />
-                  </div>
+                  <DropZoneFile data={teacher} setData={setTeacher} />
                 </div>
               )}
 
@@ -295,13 +310,14 @@ const FormWizard = () => {
               >
                 {stepNumber !== 0 && (
                   <Button
-                    text="prev"
+                    text="retour"
                     className="btn-dark"
                     onClick={handlePrev}
                   />
                 )}
                 <Button
-                  text={stepNumber !== steps.length - 1 ? "next" : "submit"}
+                  text={stepNumber !== steps.length - 1 ? "Avancer" : "submit"}
+                  isLoading={loading}
                   className="btn-dark"
                   type="submit"
                 />

@@ -5,7 +5,7 @@ export const menuItems = [
   },
 
   {
-    title: "Dashboard",
+    title: "Menu Principal",
     icon: "heroicons-outline:home",
     isOpen: true,
     isHide: true,
@@ -13,6 +13,10 @@ export const menuItems = [
       {
         childtitle: "Analytics Dashboard",
         childlink: "dashboard",
+      },
+      {
+        childtitle: "Professeurs",
+        childlink: "professeurs",
       },
       {
         childtitle: "Ecommerce Dashboard",

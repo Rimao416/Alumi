@@ -3,13 +3,13 @@ import { Navigate, Outlet } from "react-router-dom";
 
 function ProtectedRoutes({ roles }) {
   const isAuthenticated = useSelector((state) => state.authSlice.user?.user);
-  console.log(isAuthenticated.role);
+  console.log(isAuthenticated?.role);
 
   console.log(isAuthenticated);
   return isAuthenticated?.role.includes(roles) ? (
     <Outlet />
   ) : (
-    <Navigate to="/login" replace/>
+    <Navigate to="/" replace/>
   );
 }
 

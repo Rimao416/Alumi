@@ -1,8 +1,9 @@
 import React, { useState } from "react";
 import Textinput from "@/components/ui/Textinput";
-const GlobalFilter = ({ filter, setFilter }) => {
+const Filter = ({ filter, setFilter }) => {
   const [value, setValue] = useState(filter);
   const onChange = (e) => {
+    console.log(e)
     setValue(e.target.value);
     setFilter(e.target.value || undefined);
   };
@@ -17,4 +18,4 @@ const GlobalFilter = ({ filter, setFilter }) => {
   );
 };
 
-export default GlobalFilter;
+export default Filter;
