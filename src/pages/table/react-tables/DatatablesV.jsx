@@ -4,7 +4,7 @@ import Card from "@/components/ui/Card";
 import Icon from "@/components/ui/Icon";
 import dayjs from "dayjs";
 import Dropdown from "@/components/ui/Dropdown";
-import { Menu } from "@headlessui/react";
+
 import { useNavigate } from "react-router-dom";
 import {
   useTable,
@@ -16,10 +16,10 @@ import {
 // import GlobalFilter from "./GlobalFilter";
 import { assetsURL } from "../../../configs/config";
 import Filter from "./Filter";
-const Datatables = ({ title, content, col }) => {
+const DatatablesV = ({ title, content, col }) => {
   const navigate = useNavigate();
 
-
+ 
 
   const IndeterminateCheckbox = React.forwardRef(
     ({ indeterminate, ...rest }, ref) => {
@@ -237,4 +237,4 @@ const Datatables = ({ title, content, col }) => {
   );
 };
 
-export default Datatables;
+export default DatatablesV;

@@ -44,6 +44,7 @@ const DropZone = () => {
               <div className="h-[300px] w-[300px] mx-auto mt-6 rounded-md">
                 <img
                   src={file.preview}
+                  
                   className=" object-contain h-full w-full block rounded-md"
                   onLoad={() => {
                     URL.revokeObjectURL(file.preview);

@@ -90,5 +90,10 @@ export const authSlice = createSlice({
   },
 });
 
+
+
+
+
+
 export const { handleRegister, handleLogin, handleLogout } = authSlice.actions;
 export default authSlice.reducer;

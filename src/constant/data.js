@@ -19,6 +19,22 @@ export const menuItems = [
         childlink: "professeurs",
       },
       {
+        childtitle: "Periodes",
+        childlink: "periodes",
+      },
+      {
+        childtitle: "Cours",
+        childlink: "sujets",
+      },
+      {
+        childtitle: "Programmes académiques",
+        childlink: "programmes",
+      },
+      {
+        childtitle: "Niveaux",
+        childlink: "niveaux",
+      },
+      {
         childtitle: "Ecommerce Dashboard",
         childlink: "ecommerce",
       },

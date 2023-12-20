@@ -110,17 +110,28 @@ const KanbanPage = lazy(() => import("./pages/app/kanban"));
 const CalenderPage = lazy(() => import("./pages/app/calender"));
 import Loading from "@/components/Loading";
 import ProtectedRoutes from "./components/guards/ProtectedRoutes";
-import PrivateRoutes from "./components/guards/PrivateRoutes";
+// import PrivateRoutes from "./components/guards/PrivateRoutes";
 
 // MY PAGES
 
 const Professeurs = lazy(() => import("./pages/admin/teacher"));
+const Programmes = lazy(() => import("./pages/admin/program"));
+const Sujets = lazy(() => import("./pages/admin/subject"));
+const Terms = lazy(() => import("./pages/admin/term"));
+const TermsEdit = lazy(() => import("./pages/admin/term/term-edit"));
+const ProgrammesAddPage = lazy(() =>
+  import("./pages/admin/program/program-create")
+);
+const SujetsOperation = lazy(() =>
+  import("./pages/admin/subject/sujets-operation")
+);
+
 const ProfesseursAddPage = lazy(() =>
   import("./pages/admin/teacher/teacher-add")
 );
-const ProfesseursView = lazy(() =>
-  import("./pages/admin/teacher/teacher-see")
-);
+const ProfesseursView = lazy(() => import("./pages/admin/teacher/teacher-see"));
+const Niveaux = lazy(() => import("./pages/admin/niveau"));
+const NiveauxEdit = lazy(() => import("./pages/admin/niveau/niveau-edit"));
 // const  =lazy(() => import("./pages/admin/teacher"));
 function App() {
   return (
@@ -235,6 +246,16 @@ function App() {
           <Route path="professeurs" element={<Professeurs />} />
           <Route path="professeurs-create" element={<ProfesseursAddPage />} />
           <Route path="professeurs-view/:id" element={<ProfesseursView />} />
+          <Route path="programmes" element={<Programmes />} />
+          <Route path="programmes-create" element={<ProgrammesAddPage />} />
+          <Route path="programmes-edit/:id" element={<ProgrammesAddPage />} />
+          <Route path="niveaux" element={<Niveaux />} />
+          <Route path="niveaux-edit/:id" element={<NiveauxEdit />} />
+          <Route path="periodes" element={<Terms />} />
+          <Route path="periodes-edit/:id" element={<TermsEdit />} />
+          <Route path="sujets" element={<Sujets />} />
+          <Route path="sujets-create" element={<SujetsOperation />} />
+          <Route path="sujets-edit/:id" element={<SujetsOperation />} />
           {/* App pages */}
           <Route path="todo" element={<TodoPage />} />
           <Route path="email" element={<EmailPage />} />

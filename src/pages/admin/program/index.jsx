@@ -6,16 +6,16 @@ import HomeBredCurbs from "../../dashboard/HomeBredCurbs";
 import Datatables from "../../table/react-tables/Datatables";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
-import { fetchAcademicTeacher } from "../../../slice/admin/teacherSlice";
 import HomeHeader from "../../dashboard/HomeHeader";
 import Button from "../../../components/ui/Button";
 import { useNavigate } from "react-router-dom";
-import { assetsURL } from "../../../configs/config";
+// import { assetsURL } from "../../../configs/config";
 import { Menu } from "@headlessui/react";
 import Icon from "@/components/ui/Icon";
 import Dropdown from "@/components/ui/Dropdown";
 import dayjs from "dayjs";
-function Professeurs() {
+import { fetchAcademicPrograms } from "../../../slice/admin/programSlice";
+function Programmes() {
   const navigate = useNavigate();
   const COLUMNS = [
     {
@@ -26,41 +26,20 @@ function Professeurs() {
       },
     },
     {
-      Header: "Nom",
-      accessor: (row) => ({
-        name: row.name,
-        image: row.photo,
-        lastname: row.lastname,
-      }),
-      Cell: (row) => {
-        const { name, image, lastname } = row?.cell?.value || {};
-        // console.log(row)
-        return (
-          <div>
-            <span className="inline-flex items-center">
-              <span className="w-7 h-7 rounded-full ltr:mr-3 rtl:ml-3 flex-none bg-slate-600">
-                <img
-                  src={`${assetsURL}/img/users/${image}`}
-                  alt=""
-                  className="object-cover w-full h-full rounded-full"
-                />
-              </span>
-              <span className="text-sm text-slate-600 dark:text-slate-300 capitalize">
-                {name + " " + lastname}
-              </span>
-            </span>
-          </div>
-        );
-      },
-    },
-
-    {
-      Header: "Mail",
-      accessor: "email",
+      Header: "Nom du programme",
+      accessor: "name",
       Cell: (row) => {
         return <span>{row?.cell?.value}</span>;
       },
     },
+    {
+      Header: "Durée",
+      accessor: "duration",
+      Cell: (row) => {
+        return <span>{row?.cell?.value}</span>;
+      },
+    },
+
     {
       Header: "Date de création",
       accessor: "createdAt",
@@ -68,60 +47,27 @@ function Professeurs() {
         return <span>{dayjs(row?.cell?.value).format("DD/MM/YYYY")}</span>;
       },
     },
-
-    {
-      Header: "status",
-      accessor: "status",
-      Cell: (row) => {
-        return (
-          <span className="block w-full">
-            <span
-              className={` inline-block px-3 min-w-[90px] text-center mx-auto py-1 rounded-[999px] bg-opacity-25 ${
-                row?.cell?.value === "Confirmé"
-                  ? "text-success-500 bg-success-500"
-                  : ""
-              }
-                ${
-                  row?.cell?.value === "due"
-                    ? "text-warning-500 bg-warning-500"
-                    : ""
-                }
-                ${
-                  row?.cell?.value === "cancled"
-                    ? "text-danger-500 bg-danger-500"
-                    : ""
-                }
-    
-                 `}
-            >
-              {row?.cell?.value}
-            </span>
-          </span>
-        );
-      },
-    },
     {
       Header: "action",
       accessor: "action",
       Cell: (row) => {
         const handleActionClick = (actionName) => {
+          console.log(actionName);
+          const { row: programs } = row.cell;
           // Logique à exécuter lorsque l'utilisateur clique sur un bouton d'action
           switch (actionName) {
-            case "view":
-              const { row: professorData } = row.cell;
-              // console.log(professorData)
-              // const professorData = row.cell.row.original;
-              console.log(
-                "Donnéeees du professeur :",
-                professorData.original._id
-              );
-              navigate("/professeurs-view/" + professorData.original._id);
+            case "Voir":
+              // console.log(programs)
+              // const programs = row.cell.row.original;
+              console.log("Donnéeees du professeur :", programs.original._id);
+              navigate("/professeurs-view/" + programs.original._id);
 
               break;
-            case "edit":
-              console.log("Bonsoir");
+            case "Modifier":
+              //   console.log("Bonsoir");
+              navigate("/programmes-edit/" + programs.original._id);
               break;
-            case "delete":
+            case "Supprimer":
               console.log("Au revoir");
               break;
             default:
@@ -170,42 +116,42 @@ function Professeurs() {
 
   const actions = [
     {
-      name: "view",
+      name: "Voir",
       icon: "heroicons-outline:eye",
     },
     {
-      name: "edit",
+      name: "Modifier",
       icon: "heroicons:pencil-square",
     },
     {
-      name: "delete",
+      name: "Supprimer",
       icon: "heroicons-outline:trash",
     },
   ];
 
   const dispatch = useDispatch();
   useEffect(() => {
-    dispatch(fetchAcademicTeacher());
+    dispatch(fetchAcademicPrograms());
   }, []);
-  const { academicTeacher: teachers, loading } = useSelector(
-    (state) => state.teacherSlice
+  const { academicProgram: programs, loading } = useSelector(
+    (state) => state.programSlice
   );
   return (
     <div className="space-y-5">
-      <HomeHeader title="Professeurs">
+      <HomeHeader title="Programmes">
         <div className="flex sm:space-x-4 space-x-2 sm:justify-end items-center rtl:space-x-reverse">
           <Button
-            text="Ajouter un professeur"
+            text="Ajouter un programme"
             className="btn-primary"
-            link="/professeurs-create"
+            link="/programmes-create"
           />
         </div>
       </HomeHeader>
 
       {loading == false && (
         <Datatables
-          title="Liste des professeurs"
-          content={teachers}
+          title="Liste des programmes"
+          content={programs}
           col={COLUMNS}
         />
       )}
@@ -213,4 +159,4 @@ function Professeurs() {
   );
 }
 
-export default Professeurs;
+export default Programmes;

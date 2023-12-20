@@ -44,7 +44,7 @@ const Layout = () => {
   const [menuHidden] = useMenuHidden();
   // mobile menu
   const [mobileMenu, setMobileMenu] = useMobileMenu();
-  const nodeRef = useRef(null);
+  // const nodeRef = useRef(null);
 
   return (
     <>

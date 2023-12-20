@@ -20,7 +20,6 @@ export const getSingleTeacher = createAsyncThunk(
     API.defaults.headers.common["Authorization"] = `Bearer ${token}`;
     try {
       const response = await API.get(`/api/v1/admin/teachers/${id}`);
-      console.log(response);
       return response.data;
     } catch (error) {
       if (!error.response) {
@@ -34,7 +33,7 @@ export const getSingleTeacher = createAsyncThunk(
 export const addAcademicTeacher = createAsyncThunk(
   "academicTerms/addAcademicTeacher",
   async (newAcademicTeacher) => {
-    console.log(newAcademicTeacher);
+    // console.log(newAcademicTeacher);
     const { token } = JSON.parse(localStorage.getItem("profile"));
     API.defaults.headers.common["Authorization"] = `Bearer ${token}`;
     try {
@@ -42,11 +41,11 @@ export const addAcademicTeacher = createAsyncThunk(
         "/api/v1/admin/teachers/register",
         newAcademicTeacher
       );
-      console.log(response.data);
+      // console.log(response.data);
       toast.success(response.data.message);
       return response.data.academicTermCreated;
     } catch (error) {
-      console.log(error.response.data);
+      // console.log(error.response.data);
       toast.error(
         error.response.data.message ||
           "Une erreur est survenue lors de la connexion."
@@ -73,7 +72,7 @@ let academicTeacherSlice = createSlice({
         state.status = "idle";
       })
       .addCase(fetchAcademicTeacher.fulfilled, (state, action) => {
-        console.log(action);
+        // console.log(action);
         state.loading = false;
         state.error = false;
         state.academicTeacher = action.payload.data;
@@ -113,7 +112,7 @@ let academicTeacherSlice = createSlice({
         state.academicTeacher = [action.payload.data];
         state.status = "fulfilled";
       })
-      .addCase(getSingleTeacher.rejected, (state,action) => {
+      .addCase(getSingleTeacher.rejected, (state, action) => {
         state.loading = false;
         state.error = true;
         // state.errorType = action.payload;

@@ -57,9 +57,9 @@ let personalSchema = yup.object().shape({
     .matches(/^[0-9]{1,12}$/, "Entrez un numéro valide"),
   idNumber: yup.string().required("L'identifiant est requis"),
 });
-let addressSchema = yup.object().shape({
-  address: yup.string(),
-});
+// let addressSchema = yup.object().shape({
+//   address: yup.string(),
+// });
 
 const FormWizard = ({ title }) => {
   const navigate = useNavigate();

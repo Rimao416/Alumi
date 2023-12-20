@@ -1,21 +1,19 @@
 import React from "react";
-import HomeBredCurbs from "../../dashboard/HomeBredCurbs";
 // import Card from "../../../components/ui/Card";
 // import BasicArea from "../../chart/appex-chart/BasicArea";
 // import ExamapleOne from "../../table/react-tables/ExampleOne";
 import Datatables from "../../table/react-tables/Datatables";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
-import { fetchAcademicTeacher } from "../../../slice/admin/teacherSlice";
 import HomeHeader from "../../dashboard/HomeHeader";
 import Button from "../../../components/ui/Button";
 import { useNavigate } from "react-router-dom";
-import { assetsURL } from "../../../configs/config";
+// import { assetsURL } from "../../../configs/config";
 import { Menu } from "@headlessui/react";
 import Icon from "@/components/ui/Icon";
 import Dropdown from "@/components/ui/Dropdown";
-import dayjs from "dayjs";
-function Professeurs() {
+import { addTerms, getTerms } from "../../../slice/admin/termSlice";
+function Periodes() {
   const navigate = useNavigate();
   const COLUMNS = [
     {
@@ -26,102 +24,34 @@ function Professeurs() {
       },
     },
     {
-      Header: "Nom",
-      accessor: (row) => ({
-        name: row.name,
-        image: row.photo,
-        lastname: row.lastname,
-      }),
-      Cell: (row) => {
-        const { name, image, lastname } = row?.cell?.value || {};
-        // console.log(row)
-        return (
-          <div>
-            <span className="inline-flex items-center">
-              <span className="w-7 h-7 rounded-full ltr:mr-3 rtl:ml-3 flex-none bg-slate-600">
-                <img
-                  src={`${assetsURL}/img/users/${image}`}
-                  alt=""
-                  className="object-cover w-full h-full rounded-full"
-                />
-              </span>
-              <span className="text-sm text-slate-600 dark:text-slate-300 capitalize">
-                {name + " " + lastname}
-              </span>
-            </span>
-          </div>
-        );
-      },
-    },
-
-    {
-      Header: "Mail",
-      accessor: "email",
+      Header: "Nom de la période",
+      accessor: "name",
       Cell: (row) => {
         return <span>{row?.cell?.value}</span>;
       },
     },
-    {
-      Header: "Date de création",
-      accessor: "createdAt",
-      Cell: (row) => {
-        return <span>{dayjs(row?.cell?.value).format("DD/MM/YYYY")}</span>;
-      },
-    },
 
-    {
-      Header: "status",
-      accessor: "status",
-      Cell: (row) => {
-        return (
-          <span className="block w-full">
-            <span
-              className={` inline-block px-3 min-w-[90px] text-center mx-auto py-1 rounded-[999px] bg-opacity-25 ${
-                row?.cell?.value === "Confirmé"
-                  ? "text-success-500 bg-success-500"
-                  : ""
-              }
-                ${
-                  row?.cell?.value === "due"
-                    ? "text-warning-500 bg-warning-500"
-                    : ""
-                }
-                ${
-                  row?.cell?.value === "cancled"
-                    ? "text-danger-500 bg-danger-500"
-                    : ""
-                }
-    
-                 `}
-            >
-              {row?.cell?.value}
-            </span>
-          </span>
-        );
-      },
-    },
     {
       Header: "action",
       accessor: "action",
       Cell: (row) => {
         const handleActionClick = (actionName) => {
+          console.log(actionName);
+          const { row: periodes } = row.cell;
           // Logique à exécuter lorsque l'utilisateur clique sur un bouton d'action
           switch (actionName) {
-            case "view":
-              const { row: professorData } = row.cell;
-              // console.log(professorData)
-              // const professorData = row.cell.row.original;
-              console.log(
-                "Donnéeees du professeur :",
-                professorData.original._id
-              );
-              navigate("/professeurs-view/" + professorData.original._id);
+            case "Voir":
+              // console.log(periodes)
+              // const periodes = row.cell.row.original;
+              console.log("Donnéeees du professeur :", periodes.original._id);
+              navigate("/professeurs-view/" + periodes.original._id);
 
               break;
-            case "edit":
-              console.log("Bonsoir");
+            case "Modifier":
+              //   console.log("Bonsoir");
+              navigate("/periodes-edit/" + periodes.original._id);
               break;
-            case "delete":
+            case "Supprimer":
               console.log("Au revoir");
               break;
             default:
@@ -170,42 +100,50 @@ function Professeurs() {
 
   const actions = [
     {
-      name: "view",
+      name: "Voir",
       icon: "heroicons-outline:eye",
     },
     {
-      name: "edit",
+      name: "Modifier",
       icon: "heroicons:pencil-square",
     },
     {
-      name: "delete",
+      name: "Supprimer",
       icon: "heroicons-outline:trash",
     },
   ];
 
   const dispatch = useDispatch();
   useEffect(() => {
-    dispatch(fetchAcademicTeacher());
+    dispatch(getTerms());
   }, []);
-  const { academicTeacher: teachers, loading } = useSelector(
-    (state) => state.teacherSlice
+  const { academicTerm: periodes, loading } = useSelector(
+    (state) => state.termSlice
   );
+  const handleSubmit = async () => {
+    try {
+      const response = await dispatch(addTerms());
+      console.log(response);
+    } catch (error) {}
+  };
   return (
     <div className="space-y-5">
-      <HomeHeader title="Professeurs">
+      <HomeHeader title="Périodes Académiques">
         <div className="flex sm:space-x-4 space-x-2 sm:justify-end items-center rtl:space-x-reverse">
           <Button
-            text="Ajouter un professeur"
+            text="Ajouter une periode"
             className="btn-primary"
-            link="/professeurs-create"
+            // link="/programmes-create"
+            onClick={handleSubmit}
+            isLoading={loading}
           />
         </div>
       </HomeHeader>
 
       {loading == false && (
         <Datatables
-          title="Liste des professeurs"
-          content={teachers}
+          title="Liste des périodes"
+          content={periodes}
           col={COLUMNS}
         />
       )}
@@ -213,4 +151,4 @@ function Professeurs() {
   );
 }
 
-export default Professeurs;
+export default Periodes;

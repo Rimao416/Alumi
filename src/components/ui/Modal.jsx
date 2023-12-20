@@ -46,7 +46,8 @@ const Modal = ({
           <Transition appear show={showModal} as={Fragment}>
             <Dialog
               as="div"
-              className="relative z-[99999]"
+              // className="relative z-[99999]"
+              className="relative z-[1500]"
               onClose={!disableBackdrop ? closeModal : returnNull}
             >
               {!disableBackdrop && (
