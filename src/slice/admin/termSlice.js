@@ -81,9 +81,10 @@ let academicTermSlice = createSlice({
         state.status = "idle";
       })
       .addCase(getTerms.fulfilled, (state, action) => {
+        console.log(action)
         state.loading = false;
         state.error = false;
-        state.academicTerm = [...state.academicTerm, ...action.payload.data];
+        state.academicTerm = action.payload.data;
         state.status = "fulfilled";
       })
       .addCase(getTerms.rejected, (state) => {
@@ -100,10 +101,10 @@ let academicTermSlice = createSlice({
       .addCase(addTerms.fulfilled, (state, action) => {
         state.loading = false;
         state.error = false;
-        state.academicTerm = [
-          ...state.academicTerm,
-          action.payload.academicTermCreated,
-        ];
+        // state.academicTerm = [
+        //   ...state.academicTerm,
+        //   action.payload.academicTermCreated,
+        // ];
         state.status = "fulfilled";
       })
       .addCase(addTerms.rejected, (state) => {

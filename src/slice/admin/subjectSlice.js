@@ -73,13 +73,11 @@ let academicSubjectSlice = createSlice({
         state.status = "idle";
       })
       .addCase(getSubjects.fulfilled, (state, action) => {
+        // console.log(action);
         state.loading = false;
         state.error = false;
-        state.academicSubject = [
-          ...state.academicSubject,
-          ...action.payload.data,
-        ];
-        state.status = "fulfilled";
+        state.academicSubject = action.payload.data;
+        stachte.status = "fulfilled";
       })
       .addCase(getSubjects.rejected, (state) => {
         state.loading = false;
@@ -96,7 +94,10 @@ let academicSubjectSlice = createSlice({
         console.log(action);
         state.loading = false;
         state.error = false;
-        state.academicSubject = [action.payload.subjectCreated];
+        state.academicSubject = [
+          ...state.academicSubject,
+          action.payload.subjectCreated,
+        ];
         state.status = "fulfilled";
       })
       .addCase(addSubjects.rejected, (state) => {

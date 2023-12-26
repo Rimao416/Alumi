@@ -13,7 +13,7 @@ const SelectForm = ({
   data,
   setData,
   header,
-  defaultValue = options[0],
+  defaultValue,
 }) => {
   return (
     <div>
@@ -24,9 +24,9 @@ const SelectForm = ({
         className="react-select"
         classNamePrefix="select"
         options={options}
-        value={defaultValue}
         styles={styles}
         id="hh"
+        value={defaultValue}
         onChange={(selectedOption) => {
           // Ajoutez la gestion personnalisée de l'événement onChange ici
           const selectedValue = selectedOption.value; // ou toute autre propriété que vous souhaitez extraire
