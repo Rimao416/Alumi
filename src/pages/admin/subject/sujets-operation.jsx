@@ -173,7 +173,7 @@ function SujetsOperation() {
                 error={errors.name}
                 defaultValue={credentials?.name}
               />
-              {/* <SelectForm
+              <SelectForm
                 data={credentials}
                 setData={setCredentials}
                 header="academicTerm"
@@ -232,7 +232,7 @@ function SujetsOperation() {
                 data={credentials}
                 setData={setCredentials}
                 header="classLevel"
-              /> */}
+              />
               <div className="lg:col-span-2 col-span-1">
                 <div className="ltr:text-right rtl:text-left">
                   <Button
